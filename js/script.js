@@ -102,8 +102,8 @@ var y = 0.0;
 var width = 100;
 function stringBuild(time) {
   var theString = "";
-  for(let j = width; j > 0; j--) {
-    for(let i = 0; i < width; i++) {
+  for(let j = window.innerHeight/16; j > 0; j--) {
+    for(let i = 0; i < window.innerWidth/16; i++) {
       theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + x)/25.1), parseFloat(j + y)/25.1, 10.2)*10))/2)];
     }
     theString += "\n";
@@ -117,8 +117,13 @@ var deltaTime = 0;
 function updateTime(){
   var currentTime = new Date()
   var time = currentTime.getTime()
-  deltaTime = time - firsttime;
-  firsttime = time;
+  
+  deltaTime += time - firsttime;
+  var smallstep = 10;
+  while(deltaTime > smallstep) {
+    deltaTime -= smallstep;
+  }
+  
   
   document.getElementById('time_span').innerHTML = "<pre>" + stringBuild(time) + "</pre>";
   
@@ -131,16 +136,16 @@ window.addEventListener("keydown", function (event) {
 
   switch (event.key) {
     case "ArrowDown": case "s": case "S":
-      y-= deltaTime/5;
+      y-= 2*(deltaTime/8);
       break;
     case "ArrowUp": case "w": case "W":
-      y+= deltaTime/5;
+      y+= 2*(deltaTime/8);
       break;
     case "ArrowLeft": case "a": case "A":
-      x-= deltaTime/5;
+      x-= 2*(deltaTime/8);
       break;
     case "ArrowRight": case "d": case "D":
-      x += deltaTime/5;
+      x += 2*(deltaTime/8);
       break;
     default:
       return; // Quit when this doesn't handle the key event.
@@ -153,4 +158,4 @@ window.addEventListener("keydown", function (event) {
 // then dispatches event to window
 
 initial();
-setInterval(updateTime, 10);
+setInterval(updateTime, 0);
