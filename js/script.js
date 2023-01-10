@@ -112,10 +112,13 @@ function stringBuild(time) {
 
 }
 
+var deltaTime = 0;
+
 function updateTime(){
   var currentTime = new Date()
   var time = currentTime.getTime()
-
+  deltaTime = time - firsttime;
+  firsttime = time;
   
   document.getElementById('time_span').innerHTML = "<pre>" + stringBuild(time) + "</pre>";
   
@@ -128,16 +131,16 @@ window.addEventListener("keydown", function (event) {
 
   switch (event.key) {
     case "ArrowDown": case "s": case "S":
-      y--;
+      y-= deltaTime/5;
       break;
     case "ArrowUp": case "w": case "W":
-      y++
+      y+= deltaTime/5;
       break;
     case "ArrowLeft": case "a": case "A":
-      x--
+      x-= deltaTime/5;
       break;
     case "ArrowRight": case "d": case "D":
-      x++
+      x += deltaTime/5;
       break;
     default:
       return; // Quit when this doesn't handle the key event.
