@@ -115,6 +115,7 @@ function stringBuild(time) {
 var deltaTime = 0;
 
 function updateTime(){
+
   var currentTime = new Date()
   var time = currentTime.getTime()
   
@@ -123,33 +124,41 @@ function updateTime(){
   while(deltaTime > smallstep) {
     deltaTime -= smallstep;
   }
+
   
   
-  document.getElementById('time_span').innerHTML = "<pre>" + stringBuild(time) + "</pre>";
+  
+  document.getElementById('time_span').innerHTML = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
+
+  if(key != "null") {
+    switch (key) {
+      case "ArrowDown": case "s": case "S":
+        y-= (deltaTime/8);
+        break;
+      case "ArrowUp": case "w": case "W":
+        y+= (deltaTime/8);
+        break;
+      case "ArrowLeft": case "a": case "A":
+        x-= (deltaTime/8);
+        break;
+      case "ArrowRight": case "d": case "D":
+        x += (deltaTime/8);
+        break;
+      default:
+        key = "null"; // Quit when this doesn't handle the key event.
+    }
+  }
   
 }
 
+
+var key = "d"
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
   }
 
-  switch (event.key) {
-    case "ArrowDown": case "s": case "S":
-      y-= 2*(deltaTime/8);
-      break;
-    case "ArrowUp": case "w": case "W":
-      y+= 2*(deltaTime/8);
-      break;
-    case "ArrowLeft": case "a": case "A":
-      x-= 2*(deltaTime/8);
-      break;
-    case "ArrowRight": case "d": case "D":
-      x += 2*(deltaTime/8);
-      break;
-    default:
-      return; // Quit when this doesn't handle the key event.
-  }
+  key = event.key;
 
   // Cancel the default action to avoid it being handled twice
   event.preventDefault();

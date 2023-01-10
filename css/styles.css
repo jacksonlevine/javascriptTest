@@ -2,4 +2,6 @@ html {
   color:white;
   background-color: black;
   text-align:center;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-weight:bold;
 }
