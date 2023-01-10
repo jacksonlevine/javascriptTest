@@ -1,14 +1,19 @@
 # Javascript Test
-
-An infinite 2d ASCII topograph that you can control with the W, A, S, and D keys (or alternatively the arrow keys)
-
 By Jackson Levine
+
+### An infinite 2d ASCII topograph that the user can explore with keyboard input.
 
 ## Technologies Used:
 
 * Javascript
 * Html
 * CSS styling
+
+## Installation/Setup
+
+1. Visit jacksonlevine.github.io/javascriptTest/
+2. Use W, A, S, D, or the arrow keys to navigate.
+3. Press space, or any other key to stop.
 
 # Credits:
 

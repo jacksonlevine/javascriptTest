@@ -133,16 +133,16 @@ function updateTime(){
   if(key != "null") {
     switch (key) {
       case "ArrowDown": case "s": case "S":
-        y-= (deltaTime/8);
+        y-= 1.1*(deltaTime/8);
         break;
       case "ArrowUp": case "w": case "W":
-        y+= (deltaTime/8);
+        y+= 1.1*(deltaTime/8);
         break;
       case "ArrowLeft": case "a": case "A":
-        x-= (deltaTime/8);
+        x-= 1.1*(deltaTime/8);
         break;
       case "ArrowRight": case "d": case "D":
-        x += (deltaTime/8);
+        x += 1.1*(deltaTime/8);
         break;
       default:
         key = "null"; // Quit when this doesn't handle the key event.
