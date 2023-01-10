@@ -96,12 +96,15 @@ function initial() {
   firsttime = currentTime.getTime()
 }
 
-var width = 100
+var x = 0.0;
+var y = 0.0;
+
+var width = 100;
 function stringBuild(time) {
   var theString = "";
   for(let j = width; j > 0; j--) {
     for(let i = 0; i < width; i++) {
-      theString += levels[Math.abs(parseInt(ImprovedNoise.noise(parseFloat(i + ((time - firsttime)/60))/25.1, parseFloat(j)/25.1, 10.2)*10))];
+      theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + x)/25.1), parseFloat(j + y)/25.1, 10.2)*10))/2)];
     }
     theString += "\n";
   }
@@ -117,6 +120,34 @@ function updateTime(){
   document.getElementById('time_span').innerHTML = "<pre>" + stringBuild(time) + "</pre>";
   
 }
+
+window.addEventListener("keydown", function (event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if the event was already processed
+  }
+
+  switch (event.key) {
+    case "ArrowDown": case "s": case "S":
+      y--;
+      break;
+    case "ArrowUp": case "w": case "W":
+      y++
+      break;
+    case "ArrowLeft": case "a": case "A":
+      x--
+      break;
+    case "ArrowRight": case "d": case "D":
+      x++
+      break;
+    default:
+      return; // Quit when this doesn't handle the key event.
+  }
+
+  // Cancel the default action to avoid it being handled twice
+  event.preventDefault();
+}, true);
+// the last option dispatches the event to the listener first,
+// then dispatches event to window
 
 initial();
 setInterval(updateTime, 10);
