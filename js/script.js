@@ -110,7 +110,6 @@ function stringBuild(time) {
   }
   return theString;
 
-
 }
 
 var deltaTime = 0;
