@@ -96,15 +96,15 @@ function initial() {
   firsttime = currentTime.getTime()
 }
 
-var x = 0.0;
-var y = 0.0;
+var playx = 0.0;
+var playy = 0.0;
 
 var width = 100;
 function stringBuild(time) {
   var theString = "";
   for(let j = window.innerHeight/16; j > 0; j--) {
     for(let i = 0; i < window.innerWidth/16; i++) {
-      theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + x)/25.1), parseFloat(j + y)/25.1, 10.2)*10))/2)];
+      theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + playx)/25.1), parseFloat(j + playy)/25.1, 10.2)*10))/2)];
     }
     theString += "\n";
   }
@@ -133,16 +133,16 @@ function updateTime(){
   if(key != "null") {
     switch (key) {
       case "ArrowDown": case "s": case "S":
-        y-= 1.1*(deltaTime/8);
+        playy-= 1.1*(deltaTime/8);
         break;
       case "ArrowUp": case "w": case "W":
-        y+= 1.1*(deltaTime/8);
+        playy+= 1.1*(deltaTime/8);
         break;
       case "ArrowLeft": case "a": case "A":
-        x-= 1.1*(deltaTime/8);
+        playx-= 1.1*(deltaTime/8);
         break;
       case "ArrowRight": case "d": case "D":
-        x += 1.1*(deltaTime/8);
+        playx += 1.1*(deltaTime/8);
         break;
       default:
         key = "null"; // Quit when this doesn't handle the key event.
@@ -153,6 +153,40 @@ function updateTime(){
 
 
 var key = "d"
+
+var currTouchX = 0;
+var currTouchY = 0;
+
+
+window.addEventListener("touchstart", function (event) {
+  if(event.defaultPrevented) {
+    return;
+  }
+  for(var i=0; i < event.touches.length; i++) {
+    var touchId = event.touches[i].identifier;
+    var x       = event.touches[i].pageX;
+    var y       = event.touches[i].pageY;
+    currTouchX = x;
+    currTouchY = y;
+  }
+
+}, true)
+
+
+window.addEventListener("touchmove", function (event) {
+  if(event.defaultPrevented) {
+    return;
+  }
+  for(var i=0; i < event.changedTouches.length; i++) {
+    var touchId = event.changedTouches[i].identifier;
+    var x       = event.changedTouches[i].pageX;
+    var y       = event.changedTouches[i].pageY;
+    playx -= (currTouchX - x);
+    playy -= (currTouchY - y);
+  }
+
+}, true)
+
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
