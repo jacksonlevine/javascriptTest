@@ -179,7 +179,6 @@ window.addEventListener("touchmove", function (event) {
   for(var i = 0; i < event.changedTouches.length; i++) {
     playx += Math.min(Math.max((event.changedTouches[i].pageX - currTouchX)/16, -1), 1);
     playy -= Math.min(Math.max((event.changedTouches[i].pageY - currTouchY)/16, -1), 1);
-    
     if(currTouchY > event.changedTouches[i].pageY) {
       event.preventDefault();
     }
