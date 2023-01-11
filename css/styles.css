@@ -10,4 +10,5 @@ html {
   width: 100%;
   position: fixed;
   touch-action: none;
+  overscroll-behavior-y: contain;
 }
