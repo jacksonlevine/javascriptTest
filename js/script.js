@@ -152,25 +152,38 @@ function updateTime(){
 }
 
 
-var key = "d"
+var key = "";
 
 var currTouchX = 0;
 var currTouchY = 0;
 
-window.ontouchstart = function(){ 
-  for(var i = 0; i < window.touches.length; i++) {
-    currTouchX = window.touches[i].pageX;
-    currTouchY = window.touches[i].pageY;
+window.addEventListener("touchstart", function (event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if the event was already processed
   }
-};
 
-window.ontouchmove = function(){ 
-  for(var i = 0; i < window.changedTouches.length; i++) {
-    playx -= window.changedTouches[i].pageX - currTouchX;
-    playy -= window.changedTouches[i].pageY - currTouchY;
+  for(var i = 0; i < event.touches.length; i++) {
+    currTouchX = event.touches[i].pageX;
+    currTouchY = event.touches[i].pageY;
   }
-};
 
+  // Cancel the default action to avoid it being handled twice
+  event.preventDefault();
+}, true);
+
+window.addEventListener("touchmove", function (event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if the event was already processed
+  }
+
+  for(var i = 0; i < event.changedTouches.length; i++) {
+    playx -= event.changedTouches[i].pageX - currTouchX;
+    playy -= event.changedTouches[i].pageY - currTouchY;
+  }
+
+  // Cancel the default action to avoid it being handled twice
+  event.preventDefault();
+}, true);
 
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
