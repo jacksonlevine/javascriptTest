@@ -103,13 +103,13 @@ var width = 100;
 function stringBuild(time) {
   var theString = "";
   for(let j = window.innerHeight/24; j > 0; j--) {
-    for(let i = 0; i < window.innerWidth/32; i++) {
+    for(let i = 0; i < window.innerWidth/24; i++) {
       theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + playx)/25.1), parseFloat(j + playy)/25.1, 10.2)*10))/2)];
     }
     theString += "\n";
   }
   return theString;
-  
+
 
 }
 
