@@ -157,17 +157,17 @@ var key = "d"
 var currTouchX = 0;
 var currTouchY = 0;
 
-ontouchstart = (event) => { 
-  for(var i = 0; i < event.touches.length; i++) {
-    currTouchX = event.touches[i].pageX;
-    currTouchY = event.touches[i].pageY;
+window.ontouchstart = function(){ 
+  for(var i = 0; i < window.touches.length; i++) {
+    currTouchX = window.touches[i].pageX;
+    currTouchY = window.touches[i].pageY;
   }
 };
 
-ontouchmove = (event) => { 
-  for(var i = 0; i < event.changedTouches.length; i++) {
-    playx -= event.changedTouches[i].pageX - currTouchX;
-    playy -= event.changedTouches[i].pageY - currTouchY;
+window.ontouchmove = function(){ 
+  for(var i = 0; i < window.changedTouches.length; i++) {
+    playx -= window.changedTouches[i].pageX - currTouchX;
+    playy -= window.changedTouches[i].pageY - currTouchY;
   }
 };
 
