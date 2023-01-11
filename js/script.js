@@ -197,10 +197,10 @@ var xdifferential = 0;
 
 window.addEventListener("touchmove", touchMoveMethod, true);
 
-let mainPar = document.getElementById("time_span");
+/*let mainPar = document.getElementById("time_span");
 mainPar.addEventListener("touchmove", touchMoveMethod, true);
 mainPar.addEventListener("touchstart", touchStartMethod, true);
-mainPar.addEventListener("touchend", touchEndMethod, true);
+mainPar.addEventListener("touchend", touchEndMethod, true);*/
 
 function touchMoveMethod(event) {
   if (event.defaultPrevented) {
