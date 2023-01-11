@@ -75,19 +75,21 @@ class ImprovedNoise {
     );
   }
 }
-
 var levels = new Array(
   "  ",
   "..",
   "::",
-  "--",
   "==",
+  "++",
   "##",
   "@@",
-  "&&",
-  "&&",
-  "&&",
-  "&&"
+  "@@",
+  "@@",
+  "@@",
+  "@@",
+  "@@",
+  "@@",
+  "@@",
 );
 var currentTime = new Date()
 var firsttime = currentTime.getTime()
@@ -104,7 +106,17 @@ function stringBuild(time) {
   var theString = "";
   for(let j = window.innerHeight/24; j > 0; j--) {
     for(let i = 0; i < window.innerWidth/18; i++) {
-      theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + playx)/25.1), parseFloat(j + playy)/25.1, 10.2)*10))/2)];
+      let heel1 = ImprovedNoise.noise(parseFloat((i + playx)/200.1), parseFloat(j + playy)/200.1, 7.2)*levels.length+2;
+      let heel = parseInt((ImprovedNoise.noise(parseFloat((i + playx)/50.1), parseFloat(j + playy)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
+      if(heel <= levels.length-1 && heel > 0) {
+        theString += levels[heel];
+      } else {
+        if(heel > levels.length-1) {
+          theString += "@@";
+        } else {
+          theString += "  ";
+        }
+      }
     }
     theString += "\n";
   }
