@@ -177,7 +177,7 @@ window.addEventListener("touchmove", function (event) {
   }
 
   for(var i = 0; i < event.changedTouches.length; i++) {
-    playx += (event.changedTouches[i].pageX - currTouchX)/16;
+    playx -= (event.changedTouches[i].pageX - currTouchX)/16;
     playy += (event.changedTouches[i].pageY - currTouchY)/16;
     currTouchX = event.changedTouches[i].pageX;
     currTouchY = event.changedTouches[i].pageY;
