@@ -126,7 +126,10 @@ function updateTime(){
   }
 
   
-  
+  if(isMyTouchDown) {
+    playx += xdifferential;
+    playy -= ydifferential;
+  }
   
   document.getElementById('time_span').innerHTML = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
 
@@ -166,19 +169,36 @@ window.addEventListener("touchstart", function (event) {
     currTouchX = event.touches[i].pageX;
     currTouchY = event.touches[i].pageY;
   }
+  isMyTouchDown = true;
 
   // Cancel the default action to avoid it being handled twice
   event.preventDefault();
 }, true);
+
+var isMyTouchDown = false;
+window.addEventListener("touchend", function (event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if the event was already processed
+  }
+
+  isMyTouchDown = false;
+
+  // Cancel the default action to avoid it being handled twice
+  event.preventDefault();
+}, true);
+
+var ydifferential = 0;
+var xdifferential = 0;
 
 window.addEventListener("touchmove", function (event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
   }
 
+  
   for(var i = 0; i < event.changedTouches.length; i++) {
-    playx += Math.min(Math.max((event.changedTouches[i].pageX - currTouchX)/16, -1), 1);
-    playy -= Math.min(Math.max((event.changedTouches[i].pageY - currTouchY)/16, -1), 1);
+    xdifferential = Math.min(Math.max((event.changedTouches[i].pageX - currTouchX)/16, -1), 1);
+    ydifferential = Math.min(Math.max((event.changedTouches[i].pageY - currTouchY)/16, -1), 1);
     if(currTouchY > event.changedTouches[i].pageY) {
       event.preventDefault();
     }
