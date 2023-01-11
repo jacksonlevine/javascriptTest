@@ -109,6 +109,7 @@ function stringBuild(time) {
     theString += "\n";
   }
   return theString;
+  
 
 }
 
