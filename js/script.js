@@ -160,7 +160,9 @@ var key = "";
 var currTouchX = 0;
 var currTouchY = 0;
 
-window.addEventListener("touchstart", function (event) {
+window.addEventListener("touchstart", touchStartMethod, true);
+
+function touchStartMethod(event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
   }
@@ -174,10 +176,12 @@ window.addEventListener("touchstart", function (event) {
 
   // Cancel the default action to avoid it being handled twice
   event.preventDefault();
-}, true);
+}
 
 var isMyTouchDown = false;
-window.addEventListener("touchend", function (event) {
+window.addEventListener("touchend", touchEndMethod, true);
+
+function touchEndMethod(event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
   }
@@ -186,12 +190,14 @@ window.addEventListener("touchend", function (event) {
 
   // Cancel the default action to avoid it being handled twice
   event.preventDefault();
-}, true);
+}
 
 var ydifferential = 0;
 var xdifferential = 0;
 
-window.addEventListener("touchmove", function (event) {
+window.addEventListener("touchmove", touchMoveMethod, true);
+
+function touchMoveMethod(event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
   }
@@ -206,53 +212,7 @@ window.addEventListener("touchmove", function (event) {
   }
   // Cancel the default action to avoid it being handled twice
   event.preventDefault();
-}, true);
-
-let pp = document.querySelector("p");
-pp.addEventListener("touchstart", function (event) {
-  if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
-  }
-
-  for(var i = 0; i < event.touches.length; i++) {
-    currTouchX = event.touches[i].pageX;
-    currTouchY = event.touches[i].pageY;
-
-  }
-  isMyTouchDown = true;
-
-  // Cancel the default action to avoid it being handled twice
-  event.preventDefault();
-}, true);
-
-
-pp.addEventListener("touchend", function (event) {
-  if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
-  }
-
-  isMyTouchDown = false;
-
-  // Cancel the default action to avoid it being handled twice
-  event.preventDefault();
-}, true);
-
-
-
-pp.addEventListener("touchmove", function (event) {
-  if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
-  }
-
-  
-  for(var i = 0; i < event.changedTouches.length; i++) {
-    xdifferential = Math.min(Math.max((event.changedTouches[i].pageX - currTouchX)/16, -1), 1);
-    ydifferential = Math.min(Math.max((event.changedTouches[i].pageY - currTouchY)/16, -1), 1);
-    if(currTouchY > event.changedTouches[i].pageY) {
-      event.preventDefault();
-    }
-  }
-}, true);
+}
 
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
