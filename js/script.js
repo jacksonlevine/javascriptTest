@@ -102,8 +102,8 @@ var playy = 0.0;
 var width = 100;
 function stringBuild(time) {
   var theString = "";
-  for(let j = window.innerHeight/16; j > 0; j--) {
-    for(let i = 0; i < window.innerWidth/16; i++) {
+  for(let j = window.innerHeight/32; j > 0; j--) {
+    for(let i = 0; i < window.innerWidth/32; i++) {
       theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + playx)/25.1), parseFloat(j + playy)/25.1, 10.2)*10))/2)];
     }
     theString += "\n";
@@ -177,8 +177,8 @@ window.addEventListener("touchmove", function (event) {
   }
 
   for(var i = 0; i < event.changedTouches.length; i++) {
-    playx -= event.changedTouches[i].pageX - currTouchX;
-    playy -= event.changedTouches[i].pageY - currTouchY;
+    playx -= (event.changedTouches[i].pageX - currTouchX)/16;
+    playy -= (event.changedTouches[i].pageY - currTouchY)/16;
   }
 
   // Cancel the default action to avoid it being handled twice
