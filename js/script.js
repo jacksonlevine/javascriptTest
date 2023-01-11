@@ -157,35 +157,20 @@ var key = "d"
 var currTouchX = 0;
 var currTouchY = 0;
 
-
-window.addEventListener("touchstart", function (event) {
-  if(event.defaultPrevented) {
-    return;
+ontouchstart = (event) => { 
+  for(var i = 0; i < event.touches.length; i++) {
+    currTouchX = event.touches[i].pageX;
+    currTouchY = event.touches[i].pageY;
   }
-  for(var i=0; i < event.touches.length; i++) {
-    var touchId = event.touches[i].identifier;
-    var x       = event.touches[i].pageX;
-    var y       = event.touches[i].pageY;
-    currTouchX = x;
-    currTouchY = y;
+};
+
+ontouchmove = (event) => { 
+  for(var i = 0; i < event.changedTouches.length; i++) {
+    playx -= event.changedTouches[i].pageX - currTouchX;
+    playy -= event.changedTouches[i].pageY - currTouchY;
   }
+};
 
-}, true)
-
-
-window.addEventListener("touchmove", function (event) {
-  if(event.defaultPrevented) {
-    return;
-  }
-  for(var i=0; i < event.changedTouches.length; i++) {
-    var touchId = event.changedTouches[i].identifier;
-    var x       = event.changedTouches[i].pageX;
-    var y       = event.changedTouches[i].pageY;
-    playx -= (currTouchX - x);
-    playy -= (currTouchY - y);
-  }
-
-}, true)
 
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
