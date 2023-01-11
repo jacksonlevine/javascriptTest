@@ -168,6 +168,7 @@ window.addEventListener("touchstart", function (event) {
   for(var i = 0; i < event.touches.length; i++) {
     currTouchX = event.touches[i].pageX;
     currTouchY = event.touches[i].pageY;
+    
   }
   isMyTouchDown = true;
 
