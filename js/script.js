@@ -102,12 +102,96 @@ var playx = 0.0;
 var playy = 0.0;
 
 var width = 100;
+
+
+const defaultSkin = [
+  "@@  @@"+
+  "  @@  "+
+  "@@  @@"+
+  "  ##  "+
+  "##  ##",
+
+  "@@    "+
+  "()@@  "+
+  "  ##@@"+
+  "[][][]"+
+  "##  ##",
+  
+  "  @@  "+
+  "()##()"+
+  "  @@  "+
+  "[]##[]"+
+  "##  ##",
+
+  "    @@"+
+  "  @@()"+
+  "@@##  "+
+  "[][][]"+
+  "##  ##"
+]
+
+var mobiles = [];
+
+function Mob(xa, ya) {
+
+  var mob = {
+    x: xa,
+    y: ya,
+    myIndex: mobiles.length
+  };
+
+  //mob.skin = skin;
+  
+  mobiles.push(mob);
+}
+
+Mob.prototype.setPosition = function(xa, ya) {
+  //mobiles[this.myIndex].x = xa;
+  //mobiles[this.myIndex].y = ya;
+}
+
+function Player(xa, ya) {
+  //Inherits from Mob
+  Mob.call(xa, ya);
+}
+
+Player.prototype = Object.create(Mob.prototype);
+
+player = {
+  x: 0,
+  y: 0,
+  myIndex: mobiles.length
+}
+mobiles.push(player)
+
+playheight = window.innerHeight/24;
+playwidth = window.innerWidth/18;
+let timerr = 0;
 function stringBuild(time) {
+  playheight = window.innerHeight/24;
+  playwidth = window.innerWidth/18;
   var theString = "";
-  for(let j = window.innerHeight/24; j > 0; j--) {
-    for(let i = 0; i < window.innerWidth/18; i++) {
+  for(let j = playheight; j > 0; j--) {
+    for(let i = 0; i < playwidth; i++) {
+      let iterationX = i+playx;
+      let iterationY = j+playy;
+      if(timerr > 100) {
+      console.log("" + iterationX + ",  "+ iterationY + "    " + playx + ", " + playy)
+      timerr = 0;
+      } else {
+        timerr += deltaTime;
+      }
       let heel1 = ImprovedNoise.noise(parseFloat((i + playx)/200.1), parseFloat(j + playy)/200.1, 7.2)*levels.length+2;
       let heel = parseInt((ImprovedNoise.noise(parseFloat((i + playx)/50.1), parseFloat(j + playy)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
+      let isMob = false;
+      for(let a = 0; a < mobiles.length; a++) {
+        if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobiles[a].y) === parseInt(iterationY)) {
+          isMob = true;
+        }
+      }
+      if(isMob) {
+        theString += "AA";
+      }else  {
       if(heel <= levels.length-1 && heel > 0) {
         theString += levels[heel];
       } else {
@@ -117,6 +201,7 @@ function stringBuild(time) {
           theString += "  ";
         }
       }
+    }
     }
     theString += "\n";
   }
@@ -133,6 +218,8 @@ function updateTime(){
   
   deltaTime += time - firsttime;
   var smallstep = 10;
+  mobiles[player.myIndex].x = playx+parseInt(playwidth/2);
+  mobiles[player.myIndex].y = playy+parseInt(playheight/2);
   while(deltaTime > smallstep) {
     deltaTime -= smallstep;
   }
@@ -149,15 +236,19 @@ function updateTime(){
     switch (key) {
       case "ArrowDown": case "s": case "S":
         playy-= 1.1*(deltaTime/8);
+        player.direction = 2;
         break;
       case "ArrowUp": case "w": case "W":
         playy+= 1.1*(deltaTime/8);
+        player.direction = 0;
         break;
       case "ArrowLeft": case "a": case "A":
         playx-= 1.1*(deltaTime/8);
+        player.direction = 1;
         break;
       case "ArrowRight": case "d": case "D":
         playx += 1.1*(deltaTime/8);
+        player.direction = 3;
         break;
       default:
         key = "null"; // Quit when this doesn't handle the key event.
