@@ -248,6 +248,9 @@ var deltaTime = 0;
 
 function updateTime(){
 
+  let coordShower = document.getElementById("afterward");
+  coordShower.innerText = "" + playx + ", " + playy;
+
   var currentTime = new Date()
   var time = currentTime.getTime()
   
