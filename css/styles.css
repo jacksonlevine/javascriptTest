@@ -12,3 +12,8 @@ html {
   touch-action: none;
   overscroll-behavior-y: contain;
 }
+
+#afterward {
+  margin:0 10%;
+  text-align: left;
+}
