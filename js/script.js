@@ -399,4 +399,4 @@ window.addEventListener("keydown", function (event) {
 // then dispatches event to window
 
 initial();
-setInterval(updateTime, 10-deltaTime);
+setInterval(updateTime, 20-deltaTime);
