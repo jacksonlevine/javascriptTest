@@ -160,9 +160,13 @@ Player.prototype = Object.create(Mob.prototype);
 player = {
   x: 0,
   y: 0,
-  myIndex: mobiles.length
+  myIndex: mobiles.length,
+  direction: 0,
+  foottimer: 0.0,
+  isWalking: false,
+  leftfoot: false
 }
-mobiles.push(player)
+mobiles.unshift(player)
 
 playheight = window.innerHeight/24;
 playwidth = window.innerWidth/18;
@@ -171,26 +175,57 @@ function stringBuild(time) {
   playheight = window.innerHeight/24;
   playwidth = window.innerWidth/18;
   var theString = "";
+  let mobSpots = [];
   for(let j = playheight; j > 0; j--) {
     for(let i = 0; i < playwidth; i++) {
       let iterationX = i+playx;
       let iterationY = j+playy;
-      if(timerr > 100) {
-      console.log("" + iterationX + ",  "+ iterationY + "    " + playx + ", " + playy)
-      timerr = 0;
-      } else {
-        timerr += deltaTime;
-      }
       let heel1 = ImprovedNoise.noise(parseFloat((i + playx)/200.1), parseFloat(j + playy)/200.1, 7.2)*levels.length+2;
       let heel = parseInt((ImprovedNoise.noise(parseFloat((i + playx)/50.1), parseFloat(j + playy)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
       let isMob = false;
       for(let a = 0; a < mobiles.length; a++) {
         if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobiles[a].y) === parseInt(iterationY)) {
           isMob = true;
+          if(mobiles[a].isWalking) {
+            if(mobiles[a].foottimer > 100) {
+              mobiles[a].leftfoot = !mobiles[a].leftfoot;
+              mobiles[a].foottimer = 0;
+            } else {
+            mobiles[a].foottimer += deltaTime;
+            }
+          }
+          for(let m = 0; m < 5; m++) {
+            for(let o = 0; o < 3; o++) {
+              var mobPixel = {
+                x: parseInt(iterationX) + o,
+                y: parseInt(iterationY) - m,
+                brick: "" + defaultSkin[mobiles[player.myIndex].direction].charAt((((m*3)+o)*2)) + defaultSkin[mobiles[player.myIndex].direction].charAt((((m*3)+o)*2) + 1)
+              };
+              if(o === 2 && m === 4) {
+                if(mobiles[player.myIndex].leftfoot) {
+                  mobPixel.brick = "  ";
+                }
+              }
+              if(o === 0 && m === 4) {
+                if(!mobiles[player.myIndex].leftfoot) {
+                  mobPixel.brick = "  ";
+                }
+              }
+              mobSpots.unshift(mobPixel);
+            }
+          }
+          
+        }
+      }
+      let rightnowbrick = "";
+      for(let v = 0; v < mobSpots.length; v++) {
+        if(mobSpots[v].x === parseInt(iterationX) && mobSpots[v].y === parseInt(iterationY)) {
+          rightnowbrick = mobSpots[v].brick;
+          isMob = true;
         }
       }
       if(isMob) {
-        theString += "AA";
+        theString += rightnowbrick;
       }else  {
       if(heel <= levels.length-1 && heel > 0) {
         theString += levels[heel];
@@ -218,8 +253,8 @@ function updateTime(){
   
   deltaTime += time - firsttime;
   var smallstep = 10;
-  mobiles[player.myIndex].x = playx+parseInt(playwidth/2);
-  mobiles[player.myIndex].y = playy+parseInt(playheight/2);
+  mobiles[player.myIndex].x = playx+ (playwidth/2);
+  mobiles[player.myIndex].y = playy+(playheight/2);
   while(deltaTime > smallstep) {
     deltaTime -= smallstep;
   }
@@ -236,21 +271,26 @@ function updateTime(){
     switch (key) {
       case "ArrowDown": case "s": case "S":
         playy-= 1.1*(deltaTime/8);
-        player.direction = 2;
+        mobiles[player.myIndex].direction = 2;
+        mobiles[player.myIndex].isWalking = true;
         break;
       case "ArrowUp": case "w": case "W":
         playy+= 1.1*(deltaTime/8);
-        player.direction = 0;
+        mobiles[player.myIndex].direction = 0;
+        mobiles[player.myIndex].isWalking = true;
         break;
       case "ArrowLeft": case "a": case "A":
         playx-= 1.1*(deltaTime/8);
-        player.direction = 1;
+        mobiles[player.myIndex].direction = 1;
+        mobiles[player.myIndex].isWalking = true;
         break;
       case "ArrowRight": case "d": case "D":
         playx += 1.1*(deltaTime/8);
-        player.direction = 3;
+        mobiles[player.myIndex].direction = 3;
+        mobiles[player.myIndex].isWalking = true;
         break;
       default:
+        mobiles[player.myIndex].isWalking = false;
         key = "null"; // Quit when this doesn't handle the key event.
     }
   }
