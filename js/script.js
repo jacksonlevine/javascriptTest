@@ -263,7 +263,30 @@ function updateTime(){
   if(isMyTouchDown) {
     playx += xdifferential;
     playy -= ydifferential;
+    if(Math.abs(ydifferential) > Math.abs(xdifferential)) {
+    if(ydifferential > 0) {
+      mobiles[player.myIndex].direction = 2;
+      mobiles[player.myIndex].isWalking = true;
+    } else
+    if(ydifferential < 0) {
+      mobiles[player.myIndex].direction = 0;
+      mobiles[player.myIndex].isWalking = true;
+    }
+    } else {
+      if(xdifferential < 0) {
+        mobiles[player.myIndex].direction = 1;
+        mobiles[player.myIndex].isWalking = true;
+      } else
+      if(xdifferential > 0) {
+        mobiles[player.myIndex].direction = 3;
+        mobiles[player.myIndex].isWalking = true;
+      }
+    }
+  } else {
+    if(key === "null") {
+    mobiles[player.myIndex].isWalking = false;
   }
+}
   
   document.getElementById('time_span').innerHTML = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
 
