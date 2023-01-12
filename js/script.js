@@ -261,8 +261,8 @@ function updateTime(){
 
   
   if(isMyTouchDown) {
-    playx += parseInt(xdifferential/2);
-    playy -= parseInt(ydifferential/2);
+    playx += parseInt(xdifferential);
+    playy -= parseInt(ydifferential);
     if(Math.abs(ydifferential) > Math.abs(xdifferential)) {
     if(ydifferential > 0) {
       mobiles[player.myIndex].direction = 2;
@@ -399,4 +399,4 @@ window.addEventListener("keydown", function (event) {
 // then dispatches event to window
 
 initial();
-setInterval(updateTime, 0);
+setInterval(updateTime, 10-deltaTime);
