@@ -293,22 +293,22 @@ function updateTime(){
   if(key != "null") {
     switch (key) {
       case "ArrowDown": case "s": case "S":
-        playy-= 1.1*(deltaTime/12);
+        playy-= 1;
         mobiles[player.myIndex].direction = 2;
         mobiles[player.myIndex].isWalking = true;
         break;
       case "ArrowUp": case "w": case "W":
-        playy+= 1.1*(deltaTime/12);
+        playy+= 1;
         mobiles[player.myIndex].direction = 0;
         mobiles[player.myIndex].isWalking = true;
         break;
       case "ArrowLeft": case "a": case "A":
-        playx-= 1.1*(deltaTime/12);
+        playx-= 1;
         mobiles[player.myIndex].direction = 1;
         mobiles[player.myIndex].isWalking = true;
         break;
       case "ArrowRight": case "d": case "D":
-        playx += 1.1*(deltaTime/12);
+        playx += 1;
         mobiles[player.myIndex].direction = 3;
         mobiles[player.myIndex].isWalking = true;
         break;
@@ -375,8 +375,8 @@ function touchMoveMethod(event) {
 
   
   for(var i = 0; i < event.changedTouches.length; i++) {
-    xdifferential = Math.min(Math.max((event.changedTouches[i].pageX - currTouchX)/16, -1), 1);
-    ydifferential = Math.min(Math.max((event.changedTouches[i].pageY - currTouchY)/16, -1), 1);
+    xdifferential = parseInt(Math.min(Math.max((event.changedTouches[i].pageX - currTouchX)/16, -1), 1));
+    ydifferential = parseInt(Math.min(Math.max((event.changedTouches[i].pageY - currTouchY)/16, -1), 1));
     if(currTouchY > event.changedTouches[i].pageY) {
       event.preventDefault();
     }
