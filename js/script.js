@@ -261,8 +261,8 @@ function updateTime(){
 
   
   if(isMyTouchDown) {
-    playx += xdifferential;
-    playy -= ydifferential;
+    playx += xdifferential/2;
+    playy -= ydifferential/2;
     if(Math.abs(ydifferential) > Math.abs(xdifferential)) {
     if(ydifferential > 0) {
       mobiles[player.myIndex].direction = 2;
