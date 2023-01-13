@@ -142,7 +142,7 @@ function Mob(xa, ya) {
 
   //mob.skin = skin;
   
-  mobiles.push(mob);
+  mobiles.unshift(mob);
 }
 
 Mob.prototype.setPosition = function(xa, ya) {
@@ -166,7 +166,29 @@ player = {
   isWalking: false,
   leftfoot: false
 }
-mobiles.unshift(player)
+mobiles.push(player)
+
+player2 = {
+  x: 0,
+  y: 0,
+  myIndex: mobiles.length,
+  direction: 3,
+  foottimer: 0.0,
+  isWalking: false,
+  leftfoot: false
+}
+mobiles.push(player2)
+
+player3 = {
+  x: 14,
+  y: 6,
+  myIndex: mobiles.length,
+  direction: 2,
+  foottimer: 0.0,
+  isWalking: false,
+  leftfoot: false
+}
+mobiles.push(player3)
 
 playheight = window.innerHeight/24;
 playwidth = window.innerWidth/18;
@@ -191,7 +213,7 @@ function stringBuild(time) {
               mobiles[a].leftfoot = !mobiles[a].leftfoot;
               mobiles[a].foottimer = 0;
             } else {
-            mobiles[a].foottimer += deltaTime;
+            mobiles[a].foottimer += deltaTime*5;
             }
           }
           for(let m = 0; m < 5; m++) {
@@ -199,15 +221,15 @@ function stringBuild(time) {
               var mobPixel = {
                 x: parseInt(iterationX) + o,
                 y: parseInt(iterationY) - m,
-                brick: "" + defaultSkin[mobiles[player.myIndex].direction].charAt((((m*3)+o)*2)) + defaultSkin[mobiles[player.myIndex].direction].charAt((((m*3)+o)*2) + 1)
+                brick: "" + defaultSkin[mobiles[a].direction].charAt((((m*3)+o)*2)) + defaultSkin[mobiles[a].direction].charAt((((m*3)+o)*2) + 1)
               };
               if(o === 2 && m === 4) {
-                if(mobiles[player.myIndex].leftfoot) {
+                if(mobiles[a].leftfoot) {
                   mobPixel.brick = "  ";
                 }
               }
               if(o === 0 && m === 4) {
-                if(!mobiles[player.myIndex].leftfoot) {
+                if(!mobiles[a].leftfoot) {
                   mobPixel.brick = "  ";
                 }
               }
