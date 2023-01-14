@@ -75,6 +75,8 @@ class ImprovedNoise {
     );
   }
 }
+
+onload = function() {
 var levels = new Array(
   "  ",
   "..",
@@ -164,7 +166,8 @@ player = {
   direction: 0,
   foottimer: 0.0,
   isWalking: false,
-  leftfoot: false
+  leftfoot: false,
+  
 }
 mobiles.push(player)
 
@@ -263,7 +266,6 @@ function stringBuild(time) {
     theString += "\n";
   }
   return theString;
-
 }
 
 var deltaTime = 0;
@@ -271,7 +273,9 @@ var deltaTime = 0;
 function updateTime(){
 
   let coordShower = document.getElementById("afterward");
-  coordShower.innerText = "" + playx + ", " + playy;
+  let coords = "" + playx + ", " + playy;
+
+  coordShower.innerText = coords;
 
   var currentTime = new Date()
   var time = currentTime.getTime()
@@ -310,36 +314,38 @@ function updateTime(){
   } else {
     if(key === "null") {
     mobiles[player.myIndex].isWalking = false;
+    }
   }
-}
   
   document.getElementById('time_span').innerHTML = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
 
-  if(key != "null") {
-    switch (key) {
-      case "ArrowDown": case "s": case "S":
-        playy-= 1;
-        mobiles[player.myIndex].direction = 2;
-        mobiles[player.myIndex].isWalking = true;
-        break;
-      case "ArrowUp": case "w": case "W":
-        playy+= 1;
-        mobiles[player.myIndex].direction = 0;
-        mobiles[player.myIndex].isWalking = true;
-        break;
-      case "ArrowLeft": case "a": case "A":
-        playx-= 1;
-        mobiles[player.myIndex].direction = 1;
-        mobiles[player.myIndex].isWalking = true;
-        break;
-      case "ArrowRight": case "d": case "D":
-        playx += 1;
-        mobiles[player.myIndex].direction = 3;
-        mobiles[player.myIndex].isWalking = true;
-        break;
-      default:
-        mobiles[player.myIndex].isWalking = false;
-        key = "null"; // Quit when this doesn't handle the key event.
+  if((document.activeElement).getAttribute("type") != "text") {
+    if(key != "null") {
+      switch (key) {
+        case "ArrowDown": case "s": case "S":
+          playy-= 1;
+          mobiles[player.myIndex].direction = 2;
+          mobiles[player.myIndex].isWalking = true;
+          break;
+        case "ArrowUp": case "w": case "W":
+          playy+= 1;
+          mobiles[player.myIndex].direction = 0;
+          mobiles[player.myIndex].isWalking = true;
+          break;
+        case "ArrowLeft": case "a": case "A":
+          playx-= 1;
+          mobiles[player.myIndex].direction = 1;
+          mobiles[player.myIndex].isWalking = true;
+          break;
+        case "ArrowRight": case "d": case "D":
+          playx += 1;
+          mobiles[player.myIndex].direction = 3;
+          mobiles[player.myIndex].isWalking = true;
+          break;
+        default:
+          mobiles[player.myIndex].isWalking = false;
+          key = "null"; // Quit when this doesn't handle the key event.
+      }
     }
   }
   
@@ -410,6 +416,25 @@ function touchMoveMethod(event) {
   event.preventDefault();
 }
 
+let terminal = document.querySelector(".terminal");
+let form = document.querySelector("form");
+
+form.onsubmit = function(event) {
+  event.preventDefault();
+  let text = document.getElementById("inputText").value;
+  let msg = document.createElement("p");
+  msg.innerHTML = text;
+  msg.setAttribute("id", "chatmsg")
+  terminal.appendChild(msg);
+  form.reset();
+}
+
+function removeChatMsg() {
+  if(document.querySelector("#chatmsg") != null) {
+    terminal.removeChild(document.querySelector("#chatmsg"));
+  }
+}
+
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
@@ -418,10 +443,14 @@ window.addEventListener("keydown", function (event) {
   key = event.key;
 
   // Cancel the default action to avoid it being handled twice
+  if((document.activeElement).getAttribute("type") != "text" ) {
   event.preventDefault();
+  }
 }, true);
 // the last option dispatches the event to the listener first,
 // then dispatches event to window
 
 initial();
 setInterval(updateTime, 20-deltaTime);
+setInterval(removeChatMsg, 10000);
+}

@@ -13,6 +13,38 @@ html {
   overscroll-behavior-y: contain;
 }
 
+.terminal {
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  line-height: 19px;
+}
+
+.terminal p {
+  margin: 0 10%;
+}
+
+.inputSpot {
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  height:30px;
+  margin:0 10%;
+  width:100%;
+}
+
+#inputText {
+  background-color: transparent; 
+  border: 0px; 
+  outline: none; 
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none; 
+  box-shadow: none; 
+  width:100%; 
+  color:white; 
+}
+
 #afterward {
   margin:0 10%;
   text-align: left;
