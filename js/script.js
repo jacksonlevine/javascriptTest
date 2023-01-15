@@ -105,6 +105,7 @@ var playy = 0.0;
 
 var width = 100;
 
+let mobSkins = [];
 
 const defaultSkin = [
   "@@  @@"+
@@ -131,6 +132,43 @@ const defaultSkin = [
   "[][][]"+
   "##  ##"
 ]
+const ginkSkin = //w, a, s, d 
+[
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%  ::@@@@@@%%" +
+    "%%@@@@@@@@@@%%" +
+    "::::@@@@@@@@%%" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%::  @@  ::%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@::::::@@%%" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%@@@@@@::  %%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@@@@@@@::::" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+];
+
+mobSkins.push(defaultSkin)
+mobSkins.push(ginkSkin)
 
 var mobiles = [];
 
@@ -167,7 +205,9 @@ player = {
   foottimer: 0.0,
   isWalking: false,
   leftfoot: false,
-  
+  id: 1,
+  width:7,
+  height:7
 }
 mobiles.push(player)
 
@@ -178,7 +218,10 @@ player2 = {
   direction: 3,
   foottimer: 0.0,
   isWalking: false,
-  leftfoot: false
+  leftfoot: false,
+  id: 0,
+  width:3,
+  height:5
 }
 mobiles.push(player2)
 
@@ -189,7 +232,10 @@ player3 = {
   direction: 2,
   foottimer: 0.0,
   isWalking: false,
-  leftfoot: false
+  leftfoot: false,
+  id: 0,
+  width:3,
+  height:5
 }
 mobiles.push(player3)
 
@@ -211,6 +257,9 @@ function stringBuild(time) {
       for(let a = 0; a < mobiles.length; a++) {
         if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobiles[a].y) === parseInt(iterationY)) {
           isMob = true;
+          let mobID = mobiles[a].id;
+          let mobWidth = mobiles[a].width;
+          let mobHeight = mobiles[a].height;
           if(mobiles[a].isWalking) {
             if(mobiles[a].foottimer > 100) {
               mobiles[a].leftfoot = !mobiles[a].leftfoot;
@@ -219,19 +268,19 @@ function stringBuild(time) {
             mobiles[a].foottimer += deltaTime*5;
             }
           }
-          for(let m = 0; m < 5; m++) {
-            for(let o = 0; o < 3; o++) {
+          for(let m = 0; m < mobHeight; m++) {
+            for(let o = 0; o < mobWidth; o++) {
               var mobPixel = {
                 x: parseInt(iterationX) + o,
                 y: parseInt(iterationY) - m,
-                brick: "" + defaultSkin[mobiles[a].direction].charAt((((m*3)+o)*2)) + defaultSkin[mobiles[a].direction].charAt((((m*3)+o)*2) + 1)
+                brick: "" + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2)) + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2) + 1)
               };
-              if(o === 2 && m === 4) {
+              if(o === mobWidth-1 && m === mobHeight-1) {
                 if(mobiles[a].leftfoot) {
                   mobPixel.brick = "  ";
                 }
               }
-              if(o === 0 && m === 4) {
+              if(o === 0 && m === mobHeight-1) {
                 if(!mobiles[a].leftfoot) {
                   mobPixel.brick = "  ";
                 }
