@@ -80,18 +80,16 @@ onload = function() {
 var levels = new Array(
   "  ",
   "..",
+  "..",
+  "::",
   "::",
   "==",
-  "++",
-  "##",
-  "@@",
-  "@@",
-  "@@",
-  "@@",
-  "@@",
-  "@@",
-  "@@",
-  "@@",
+  "==",
+  "==",
+  "==",
+  "==",
+  "==",
+  "==",
 );
 var currentTime = new Date()
 var firsttime = currentTime.getTime()
@@ -102,8 +100,6 @@ function initial() {
 
 var playx = 0.0;
 var playy = 0.0;
-
-var width = 100;
 
 let mobSkins = [];
 
@@ -171,6 +167,7 @@ mobSkins.push(defaultSkin)
 mobSkins.push(ginkSkin)
 
 var mobiles = [];
+var statics = [];
 
 function Mob(xa, ya) {
 
@@ -196,6 +193,33 @@ function Player(xa, ya) {
 }
 
 Player.prototype = Object.create(Mob.prototype);
+
+for(let i = 0; i < 30; i++) {
+let rock = {
+  x: (Math.random()*500)-250,
+  y: (Math.random()*500)-250,
+  width: 8,
+  height: 4,
+  thing:
+  "000@@#00"+
+  "0#@@@##0" +
+  ":##@@@##" +
+  ".::###@#" 
+}
+statics.push(rock);
+}
+
+for(let i = 0; i < 150; i++) {
+  let tree = {
+    x: (Math.random()*500)-250,
+    y: (Math.random()*500)-250,
+    width: 26,
+    height: 14,
+    thing: makeTree()
+  }
+  statics.push(tree);
+  }
+
 
 player = {
   x: 0,
@@ -247,6 +271,7 @@ function stringBuild(time) {
   playwidth = window.innerWidth/18;
   var theString = "";
   let mobSpots = [];
+  let statSpots = [];
   for(let j = playheight; j > 0; j--) {
     for(let i = 0; i < playwidth; i++) {
       let iterationX = i+playx;
@@ -254,6 +279,28 @@ function stringBuild(time) {
       let heel1 = ImprovedNoise.noise(parseFloat((i + playx)/200.1), parseFloat(j + playy)/200.1, 7.2)*levels.length+2;
       let heel = parseInt((ImprovedNoise.noise(parseFloat((i + playx)/50.1), parseFloat(j + playy)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
       let isMob = false;
+      let isStat = false;
+      for(let s = 0; s < statics.length; s++) {
+        if(parseInt(statics[s].x) === parseInt(iterationX) && parseInt(statics[s].y) === parseInt(iterationY)) {
+          let statWidth = statics[s].width;
+          let statHeight = statics[s].height;
+          for(let t = 0; t < statHeight; t++) {
+            for(let c = 0; c < statWidth; c++) {
+              let charOfTheStat = statics[s].thing.charAt((t*statWidth)+c) 
+              if(charOfTheStat != "0") {
+                var statPixel = {
+                  x: parseInt(iterationX) + c,
+                  y: parseInt(iterationY) - t,
+                  brick: "" + charOfTheStat + charOfTheStat,
+                  statX: iterationX,
+                  statY: iterationY
+                };
+                statSpots.unshift(statPixel);
+              }
+            }
+          }
+        }
+      }
       for(let a = 0; a < mobiles.length; a++) {
         if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobiles[a].y) === parseInt(iterationY)) {
           isMob = true;
@@ -273,7 +320,9 @@ function stringBuild(time) {
               var mobPixel = {
                 x: parseInt(iterationX) + o,
                 y: parseInt(iterationY) - m,
-                brick: "" + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2)) + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2) + 1)
+                brick: "" + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2)) + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2) + 1),
+                mobX: iterationX,
+                mobY: iterationY
               };
               if(o === mobWidth-1 && m === mobHeight-1) {
                 if(mobiles[a].leftfoot) {
@@ -292,20 +341,34 @@ function stringBuild(time) {
         }
       }
       let rightnowbrick = "";
+      let mobPix;
       for(let v = 0; v < mobSpots.length; v++) {
         if(mobSpots[v].x === parseInt(iterationX) && mobSpots[v].y === parseInt(iterationY)) {
           rightnowbrick = mobSpots[v].brick;
           isMob = true;
+          mobPix = mobSpots[v];
         }
       }
-      if(isMob) {
+      for(let v = 0; v < statSpots.length; v++) {
+        if(statSpots[v].x === parseInt(iterationX) && statSpots[v].y === parseInt(iterationY)) {
+          if(isMob) {
+            if(mobPix.mobY-3 > statSpots[v].statY) {
+              rightnowbrick = statSpots[v].brick;
+            }
+          } else {
+          rightnowbrick = statSpots[v].brick;
+          }
+          isStat = true;
+        }
+      }
+      if(isMob || isStat) {
         theString += rightnowbrick;
       }else  {
       if(heel <= levels.length-1 && heel > 0) {
         theString += levels[heel];
       } else {
         if(heel > levels.length-1) {
-          theString += "@@";
+          theString += "%%";
         } else {
           theString += "  ";
         }
@@ -502,4 +565,105 @@ window.addEventListener("keydown", function (event) {
 initial();
 setInterval(updateTime, 20-deltaTime);
 setInterval(removeChatMsg, 10000);
+}
+
+function makeTree() {
+  let intString = []
+  let width = 26;
+  let height = 14;
+  let amplitudeX = 3;
+    for(let j = 0; j < width; j++) {
+      for(let i = 0; i < height; i++) {
+        intString.push(0);
+      }
+    }
+    let initialSpot = {
+      x: parseInt(width/2),
+      y: height-1
+    }
+    let initialDirection = {
+      x: (Math.random()-0.5),
+      y: 1
+    }
+    let trunkheight = Math.min(Math.random()*10, 5);
+    let nextSpot = {
+      x: 0,
+      y: 0
+    }
+    for(let i = 0; i < trunkheight; i++) {
+      intString[(parseInt(initialSpot.y)*width)+parseInt(initialSpot.x)] = 1;
+      initialSpot.x += initialDirection.x;
+      initialSpot.y -= initialDirection.y;
+      nextSpot.x = initialSpot.x;
+      nextSpot.y = initialSpot.y;
+    }
+    let nextSpots = [];
+    for(let i = 0; i < 3; i++) {
+      let branchlength = Math.min(Math.random()*5, 3);
+      let nextSpot2 = {
+        x: 0,
+        y: 0
+      }
+      let newDirection = {
+        x: (Math.random()-0.5)*amplitudeX,
+        y: 1
+      }
+      for(let b = 0; b < branchlength; b++) {
+        intString[(parseInt(nextSpot.y)*width)+parseInt(nextSpot.x)] = 1;
+        nextSpot.x += newDirection.x;
+        nextSpot.y -= newDirection.y;
+        nextSpot2.x = initialSpot.x;
+        nextSpot2.y = initialSpot.y;
+      }
+      nextSpots.push(nextSpot2);
+    }
+    nextSpotsClone = [...nextSpots];
+    let leafspots = [];
+    for(let i = 0; i < 3; i++) {
+      for(let t = 0; t < 3; t++) {
+        let finlength = Math.min(Math.random()*5, 3);
+        let newDirection = {
+          x: (Math.random()-0.5)*amplitudeX,
+          y: 1
+        }
+        let endOfThisBranch = {
+          x: 0,
+          y: 0
+        }
+        for(let b = 0; b < finlength; b++) {
+          intString[(parseInt(nextSpots[i].y)*width)+parseInt(nextSpots[i].x)] = 1;
+          nextSpots[i].x += newDirection.x;
+          nextSpots[i].y -= newDirection.y;
+          endOfThisBranch.x = nextSpots[i].x;
+          endOfThisBranch.y = nextSpots[i].y;
+        }
+        leafspots.push(endOfThisBranch);
+      }
+      nextSpots = [...nextSpotsClone]
+    }
+    for(let i of leafspots) {
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x-1)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x-1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x-2)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x+2)] = 2;
+    }
+    let string = ""
+    for(let j = 0; j < height; j++) {
+      for(let i = 0; i < width; i++) {
+        if(intString[(j*width)+i] === 0) {
+          string += "0";
+        }
+        if(intString[(j*width)+i] === 1) {
+          string += "#";
+        }
+        if(intString[(j*width)+i] === 2) {
+          string += "@";
+        }
+      }
+      //string += "\n"; only for readability
+    }
+    return string;
 }
