@@ -265,15 +265,18 @@ mobiles.push(player3)
 
 playheight = window.innerHeight/24;
 playwidth = window.innerWidth/18;
+let statOverscan = 20;
 let timerr = 0;
+
 function stringBuild(time) {
+  let isInScreen = false;
   playheight = window.innerHeight/24;
   playwidth = window.innerWidth/18;
   var theString = "";
   let mobSpots = [];
   let statSpots = [];
-  for(let j = playheight; j > 0; j--) {
-    for(let i = 0; i < playwidth; i++) {
+  for(let j = playheight + statOverscan; j > 0; j--) {
+    for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
       let iterationX = i+playx;
       let iterationY = j+playy;
       let heel1 = ImprovedNoise.noise(parseFloat((i + playx)/200.1), parseFloat(j + playy)/200.1, 7.2)*levels.length+2;
@@ -293,7 +296,8 @@ function stringBuild(time) {
                   y: parseInt(iterationY) - t,
                   brick: "" + charOfTheStat + charOfTheStat,
                   statX: iterationX,
-                  statY: iterationY
+                  statY: iterationY,
+                  sHeight: statHeight
                 };
                 statSpots.unshift(statPixel);
               }
@@ -352,7 +356,7 @@ function stringBuild(time) {
       for(let v = 0; v < statSpots.length; v++) {
         if(statSpots[v].x === parseInt(iterationX) && statSpots[v].y === parseInt(iterationY)) {
           if(isMob) {
-            if(mobPix.mobY-3 > statSpots[v].statY) {
+            if(mobPix.mobY-3 > statSpots[v].statY - statSpots[v].sHeight) {
               rightnowbrick = statSpots[v].brick;
             }
           } else {
@@ -361,21 +365,26 @@ function stringBuild(time) {
           isStat = true;
         }
       }
-      if(isMob || isStat) {
-        theString += rightnowbrick;
-      }else  {
-      if(heel <= levels.length-1 && heel > 0) {
-        theString += levels[heel];
-      } else {
-        if(heel > levels.length-1) {
-          theString += "%%";
-        } else {
-          theString += "  ";
+      if(i > 0 && i < playwidth && j > 0 && j < playheight) {
+        isInScreen = true;
+        if(isMob || isStat) {
+          theString += rightnowbrick;
+        }else  {
+          if(heel <= levels.length-1 && heel > 0) {
+            theString += levels[heel];
+          } else {
+            if(heel > levels.length-1) {
+              theString += "%%";
+            } else {
+              theString += "  ";
+            }
+          }
         }
       }
     }
+    if(isInScreen) {
+      theString += "\n";
     }
-    theString += "\n";
   }
   return theString;
 }
@@ -563,7 +572,7 @@ window.addEventListener("keydown", function (event) {
 // then dispatches event to window
 
 initial();
-setInterval(updateTime, 20-deltaTime);
+setInterval(updateTime, 1-deltaTime);
 setInterval(removeChatMsg, 10000);
 }
 
