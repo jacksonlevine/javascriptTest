@@ -265,7 +265,7 @@ mobiles.push(player3)
 
 playheight = window.innerHeight/24;
 playwidth = window.innerWidth/18;
-let statOverscan = 20;
+let statOverscan = 12;
 let timerr = 0;
 
 function stringBuild(time) {
