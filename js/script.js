@@ -92,11 +92,9 @@ var levels = new Array(
   "==",
 );
 var currentTime = new Date()
-var firsttime = currentTime.getTime()
-function initial() {
-  currentTime = new Date()
-  firsttime = currentTime.getTime()
-}
+
+let deltaTime = 0;
+
 
 var playx = 0.0;
 var playy = 0.0;
@@ -194,7 +192,7 @@ function Player(xa, ya) {
 
 Player.prototype = Object.create(Mob.prototype);
 
-for(let i = 0; i < 30; i++) {
+for(let i = 0; i < 15; i++) {
 let rock = {
   x: (Math.random()*500)-250,
   y: (Math.random()*500)-250,
@@ -209,7 +207,7 @@ let rock = {
 statics.push(rock);
 }
 
-for(let i = 0; i < 150; i++) {
+for(let i = 0; i < 30; i++) {
   let tree = {
     x: (Math.random()*500)-250,
     y: (Math.random()*500)-250,
@@ -389,7 +387,7 @@ function stringBuild(time) {
   return theString;
 }
 
-var deltaTime = 0;
+
 
 function updateTime(){
 
@@ -399,9 +397,8 @@ function updateTime(){
   coordShower.innerText = coords;
 
   var currentTime = new Date()
-  var time = currentTime.getTime()
+  var firsttime = currentTime.getTime()
   
-  deltaTime += time - firsttime;
   var smallstep = 10;
   mobiles[player.myIndex].x = playx+ (playwidth/2);
   mobiles[player.myIndex].y = playy+(playheight/2);
@@ -469,7 +466,11 @@ function updateTime(){
       }
     }
   }
+  currentTime = new Date();
+  var time = currentTime.getTime()
   
+  deltaTime += time - firsttime;
+  //console.log(deltaTime);
 }
 
 
@@ -570,9 +571,9 @@ window.addEventListener("keydown", function (event) {
 }, true);
 // the last option dispatches the event to the listener first,
 // then dispatches event to window
+updateTime();
+setInterval(updateTime, 70-(deltaTime));
 
-initial();
-setInterval(updateTime, 1-deltaTime);
 setInterval(removeChatMsg, 10000);
 }
 

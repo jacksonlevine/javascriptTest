@@ -11,6 +11,7 @@ html {
   position: fixed;
   touch-action: none;
   overscroll-behavior-y: contain;
+
 }
 
 .terminal {
