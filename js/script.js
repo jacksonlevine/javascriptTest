@@ -435,7 +435,7 @@ function updateTime(){
     }
   }
   
-  document.getElementById('time_span').innerHTML = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
+  document.getElementById('time_span').textContent = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
 
   if((document.activeElement).getAttribute("type") != "text") {
     if(key != "null") {
@@ -545,7 +545,7 @@ form.onsubmit = function(event) {
   event.preventDefault();
   let text = document.getElementById("inputText").value;
   let msg = document.createElement("p");
-  msg.innerHTML = text;
+  msg.textContent = text;
   msg.setAttribute("id", "chatmsg")
   terminal.appendChild(msg);
   form.reset();
