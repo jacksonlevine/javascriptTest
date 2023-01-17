@@ -571,8 +571,15 @@ window.addEventListener("keydown", function (event) {
 }, true);
 // the last option dispatches the event to the listener first,
 // then dispatches event to window
+let deltaTimes = 0;
+let amtToAverage = 50;
+for(let i = 0; i < amtToAverage; i++) { //get an average delta time to speed the game ticks out
 updateTime();
-setInterval(updateTime, 70-(deltaTime));
+  deltaTimes += deltaTime;
+}
+deltaTime = deltaTimes/amtToAverage;
+console.log(deltaTime);
+setInterval(updateTime, 50-(deltaTime));
 
 setInterval(removeChatMsg, 10000);
 }
