@@ -2,7 +2,7 @@ html {
   color:white;
   background-color: black;
   text-align:center;
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-family:monospace;
   font-weight:bold;
   user-select:none;
   height: 100%;
@@ -11,7 +11,7 @@ html {
   position: fixed;
   touch-action: none;
   overscroll-behavior-y: contain;
-
+  white-space: pre;
 }
 
 .terminal {

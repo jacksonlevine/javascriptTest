@@ -435,7 +435,7 @@ function updateTime(){
     }
   }
   
-  document.getElementById('time_span').textContent = "<pre><strong>" + stringBuild(time) + "</strong></pre>";
+  document.getElementById('time_span').textContent = "" + stringBuild(time)
 
   if((document.activeElement).getAttribute("type") != "text") {
     if(key != "null") {
