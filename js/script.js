@@ -266,14 +266,21 @@ playwidth = window.innerWidth/18;
 let statOverscan = 12;
 let timerr = 0;
 
-function noiseValueFromCoord(i, j) {
+function noiseValueFromCoord(i, j, scale, offset) {
   let heel1 = ImprovedNoise.noise(parseFloat((i)/200.1), parseFloat(j)/200.1, 7.2)*levels.length+2;
   let heel = parseInt((ImprovedNoise.noise(parseFloat((i)/50.1), parseFloat(j)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
-  return heel;
+  if(scale != null && offset === null) {
+    return heel*scale;
+  } else
+  if(scale != null && offset != null) {
+    return (heel+offset) * scale;
+  } else {
+    return heel;
+  }
 }
 
 function isWater(x, y) {
-  return (noiseValueFromCoord(parseInt(x), parseInt(y)) > 0)
+  return (noiseValueFromCoord(parseInt(x), parseInt(y)) < 1)
 }
 
 function stringBuild(time) {
@@ -313,13 +320,17 @@ function stringBuild(time) {
         }
       }
       for(let a = 0; a < mobiles.length; a++) {
-        let mobY = (isWater(mobiles[a].x, mobiles[a].y)) ? mobiles[a].y+Math.floor(mobiles[a].height/2) : mobiles[a].y;
+        let mobY = (isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].y) : mobiles[a].y;
         if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
           isMob = true;
           let mobID = mobiles[a].id;
           let mobWidth = mobiles[a].width;
           let isInWater = isWater(mobiles[a].x, mobiles[a].y)
-          let mobHeight = (isInWater) ? mobiles[a].height : Math.ceil(mobiles[a].height/2)
+          let mobHeight = (isInWater) ? Math.floor(Math.min(mobiles[a].height+(noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].height)) : mobiles[a].height
+
+          if(a === 0) {
+            console.log(noiseValueFromCoord(mobiles[a].x, mobiles[a].y))
+          }
           if(mobiles[a].isWalking) {
             if(mobiles[a].foottimer > 100) {
               mobiles[a].leftfoot = !mobiles[a].leftfoot;
@@ -337,7 +348,7 @@ function stringBuild(time) {
                 mobX: iterationX,
                 mobY: iterationY
               };
-              if(isInWater) {
+              if(!isInWater) {
                 if(o === mobWidth-1 && m === mobHeight-1) {
                   if(mobiles[a].leftfoot) {
                     mobPixel.brick = "  ";
