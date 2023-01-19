@@ -266,6 +266,16 @@ playwidth = window.innerWidth/18;
 let statOverscan = 12;
 let timerr = 0;
 
+function noiseValueFromCoord(i, j) {
+  let heel1 = ImprovedNoise.noise(parseFloat((i)/200.1), parseFloat(j)/200.1, 7.2)*levels.length+2;
+  let heel = parseInt((ImprovedNoise.noise(parseFloat((i)/50.1), parseFloat(j)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
+  return heel;
+}
+
+function isWater(x, y) {
+  return (noiseValueFromCoord(parseInt(x), parseInt(y)) > 0)
+}
+
 function stringBuild(time) {
   let isInScreen = false;
   playheight = window.innerHeight/24;
@@ -277,8 +287,7 @@ function stringBuild(time) {
     for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
       let iterationX = i+playx;
       let iterationY = j+playy;
-      let heel1 = ImprovedNoise.noise(parseFloat((i + playx)/200.1), parseFloat(j + playy)/200.1, 7.2)*levels.length+2;
-      let heel = parseInt((ImprovedNoise.noise(parseFloat((i + playx)/50.1), parseFloat(j + playy)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
+      let heel = noiseValueFromCoord(i+playx, j+playy);
       let isMob = false;
       let isStat = false;
       for(let s = 0; s < statics.length; s++) {
@@ -304,11 +313,13 @@ function stringBuild(time) {
         }
       }
       for(let a = 0; a < mobiles.length; a++) {
-        if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobiles[a].y) === parseInt(iterationY)) {
+        let mobY = (isWater(mobiles[a].x, mobiles[a].y)) ? mobiles[a].y+Math.floor(mobiles[a].height/2) : mobiles[a].y;
+        if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
           isMob = true;
           let mobID = mobiles[a].id;
           let mobWidth = mobiles[a].width;
-          let mobHeight = mobiles[a].height;
+          let isInWater = isWater(mobiles[a].x, mobiles[a].y)
+          let mobHeight = (isInWater) ? mobiles[a].height : Math.ceil(mobiles[a].height/2)
           if(mobiles[a].isWalking) {
             if(mobiles[a].foottimer > 100) {
               mobiles[a].leftfoot = !mobiles[a].leftfoot;
@@ -326,14 +337,16 @@ function stringBuild(time) {
                 mobX: iterationX,
                 mobY: iterationY
               };
-              if(o === mobWidth-1 && m === mobHeight-1) {
-                if(mobiles[a].leftfoot) {
-                  mobPixel.brick = "  ";
+              if(isInWater) {
+                if(o === mobWidth-1 && m === mobHeight-1) {
+                  if(mobiles[a].leftfoot) {
+                    mobPixel.brick = "  ";
+                  }
                 }
-              }
-              if(o === 0 && m === mobHeight-1) {
-                if(!mobiles[a].leftfoot) {
-                  mobPixel.brick = "  ";
+                if(o === 0 && m === mobHeight-1) {
+                  if(!mobiles[a].leftfoot) {
+                    mobPixel.brick = "  ";
+                  }
                 }
               }
               mobSpots.unshift(mobPixel);
