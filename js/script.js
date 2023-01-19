@@ -374,7 +374,7 @@ function stringBuild(time) {
             if(heel > levels.length-1) {
               theString += "%%";
             } else {
-              theString += "  ";
+              theString += levels[0];
             }
           }
         }
@@ -387,7 +387,8 @@ function stringBuild(time) {
   return theString;
 }
 
-
+let water2 = false;
+let waterTimer = 0;
 
 function updateTime(){
 
@@ -406,6 +407,17 @@ function updateTime(){
     deltaTime -= smallstep;
   }
 
+  if(waterTimer > 100) {
+    waterTimer = 0;
+    water2 = !water2;
+  } else {
+    waterTimer += deltaTime;
+  }
+  if(water2) {
+    levels[0] = "~."
+  } else {
+    levels[0] = ".~"
+  }
   
   if(isMyTouchDown) {
     playx += parseInt(xdifferential);
