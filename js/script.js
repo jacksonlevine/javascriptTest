@@ -404,7 +404,7 @@ function stringBuild(time) {
               theString += "%%";
             } else {
               let date = new Date()
-              if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/1000)*10) === 0) {
+              if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/10000)*10) === 0 && parseInt((iterationY*playwidth)+iterationX)%4 === 0) {
                 theString += levels[0]
               } else {
                 theString += "  "
