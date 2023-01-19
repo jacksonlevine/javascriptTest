@@ -285,7 +285,7 @@ function isWater(x, y) {
 
 function stringBuild(time) {
   let isInScreen = false;
-  playheight = window.innerHeight/24;
+  playheight = window.innerHeight/18;
   playwidth = window.innerWidth/18;
   var theString = "";
   let mobSpots = [];
