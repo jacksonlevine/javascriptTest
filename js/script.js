@@ -283,7 +283,9 @@ function isWater(x, y) {
   return (noiseValueFromCoord(parseInt(x), parseInt(y)) < 1)
 }
 
+let waterInterval = 0;
 function stringBuild(time) {
+  waterInterval = 0
   let isInScreen = false;
   playheight = window.innerHeight/18;
   playwidth = window.innerWidth/18;
@@ -320,7 +322,7 @@ function stringBuild(time) {
         }
       }
       for(let a = 0; a < mobiles.length; a++) {
-        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
+        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
         let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
         if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
           isMob = true;
@@ -401,7 +403,12 @@ function stringBuild(time) {
             if(heel > levels.length-1) {
               theString += "%%";
             } else {
-              theString += levels[0];
+              let date = new Date()
+              if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/1000)*10) === 0) {
+                theString += levels[0]
+              } else {
+                theString += "  "
+              }
             }
           }
         }
@@ -441,9 +448,9 @@ function updateTime(){
     waterTimer += deltaTime;
   }
   if(water2) {
-    levels[0] = "~."
+    levels[0] = " ."
   } else {
-    levels[0] = ".~"
+    levels[0] = ". "
   }
   
   if(isMyTouchDown) {
