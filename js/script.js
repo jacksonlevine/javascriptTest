@@ -320,17 +320,20 @@ function stringBuild(time) {
         }
       }
       for(let a = 0; a < mobiles.length; a++) {
-        let mobY = (isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].y) : mobiles[a].y;
-        if(parseInt(mobiles[a].x) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
+        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
+        let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
+        if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
           isMob = true;
           let mobID = mobiles[a].id;
           let mobWidth = mobiles[a].width;
           let isInWater = isWater(mobiles[a].x, mobiles[a].y)
           let mobHeight = (isInWater) ? Math.floor(Math.min(mobiles[a].height+(noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].height)) : mobiles[a].height
 
-          if(a === 0) {
+          if(a === 0) 
+          {
             console.log(noiseValueFromCoord(mobiles[a].x, mobiles[a].y))
           }
+
           if(mobiles[a].isWalking) {
             if(mobiles[a].foottimer > 100) {
               mobiles[a].leftfoot = !mobiles[a].leftfoot;
@@ -425,8 +428,8 @@ function updateTime(){
   var firsttime = currentTime.getTime()
   
   var smallstep = 10;
-  mobiles[player.myIndex].x = playx+ (playwidth/2);
-  mobiles[player.myIndex].y = playy+(playheight/2);
+  mobiles[player.myIndex].x = playx+ (playwidth/2) + (mobiles[player.myIndex].width/2);
+  mobiles[player.myIndex].y = playy+(playheight/2) - (mobiles[player.myIndex].height);
   while(deltaTime > smallstep) {
     deltaTime -= smallstep;
   }
@@ -615,7 +618,7 @@ updateTime();
 }
 deltaTime = deltaTimes/amtToAverage;
 console.log(deltaTime);
-setInterval(updateTime, 50-(deltaTime));
+setInterval(updateTime, 30);
 
 setInterval(removeChatMsg, 10000);
 }
