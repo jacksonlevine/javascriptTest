@@ -1,7 +1,7 @@
 # Javascript Test
 By Jackson Levine
 
-### An infinite 2d ASCII topograph that the user can explore with keyboard input.
+### An infinite 2d ASCII world with static objects and mobile objects
 
 ## Technologies Used:
 
