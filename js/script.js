@@ -293,7 +293,7 @@ function stringBuild(time) {
   let mobSpots = [];
   let statSpots = [];
   for(let j = playheight + statOverscan; j > 0; j--) {
-    for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
+    for(let i = -statOverscan; i < playwidth + statOverscan; i++) {             //god damn fucking mess
       let iterationX = i+playx;
       let iterationY = j+playy;
       let heel = noiseValueFromCoord(i+playx, j+playy);
@@ -392,6 +392,7 @@ function stringBuild(time) {
           isStat = true;
         }
       }
+      theString += "<p id=\"move\">"
       if(i > 0 && i < playwidth && j > 0 && j < playheight) {
         isInScreen = true;
         if(isMob || isStat) {
@@ -409,10 +410,12 @@ function stringBuild(time) {
               } else {
                 theString += "  "
               }
+              
             }
           }
         }
       }
+      theString += "</p>"
     }
     if(isInScreen) {
       theString += "\n";
@@ -481,7 +484,7 @@ function updateTime(){
     }
   }
   
-  document.getElementById('time_span').textContent = "" + stringBuild(time)
+  document.getElementById('time_span').innerHTML = "" + stringBuild(time)
 
   if((document.activeElement).getAttribute("type") != "text") {
     if(key != "null") {

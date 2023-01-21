@@ -14,6 +14,14 @@ html {
   white-space: pre;
 }
 
+p#move {
+  transition: all 100ms ease-in-out;
+  display:inline;
+}
+p#move:hover {
+  transform: scale(2.0);
+}
+
 .terminal {
   display:flex;
   flex-direction: column;
