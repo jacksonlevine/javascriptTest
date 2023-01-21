@@ -15,9 +15,9 @@ By Jackson Levine
 2. Use W, A, S, D, or the arrow keys to navigate.
 3. Press space, or any other key to stop.
 
-## TODO:
+## KNOWN BUGS:
+"HUD elements" position is all out of whack.
 
-Mobile phone support
 # Credits:
 
 Vincent Bruijn @y-a-v-a - for porting Ken Perlin's smooth noise algorithm to JavaScript.

@@ -61,6 +61,7 @@ html {
   justify-content: flex-start;
   align-items: flex-start;
   line-height: 19px;
+  transform: translateY(-75px);
 
 }
 
@@ -72,6 +73,7 @@ html {
   height:30px;
   margin:0 10%;
   width:100%;
+  transform: translateY(-75px);
 }
 
 #inputText {
@@ -88,4 +90,5 @@ html {
 #afterward {
   margin:0 10%;
   text-align: left;
+  transform: translateY(-75px);
 }
