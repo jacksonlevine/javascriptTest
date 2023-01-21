@@ -165,7 +165,7 @@ mobSkins.push(defaultSkin)
 mobSkins.push(ginkSkin)
 
 var mobiles = [];
-var statics = [];
+var statics = new Map();
 
 function Mob(xa, ya) {
 
@@ -192,10 +192,12 @@ function Player(xa, ya) {
 
 Player.prototype = Object.create(Mob.prototype);
 
-for(let i = 0; i < 15; i++) {
+for(let i = 0; i < 1300; i++) {
+  let x = (Math.random()*2000)-1000
+  let y = (Math.random()*2000)-1000
 let rock = {
-  x: (Math.random()*500)-250,
-  y: (Math.random()*500)-250,
+  x: x,
+  y: y,
   width: 8,
   height: 4,
   thing:
@@ -204,18 +206,20 @@ let rock = {
   ":##@@@##" +
   ".::###@#" 
 }
-statics.push(rock);
+statics.set(parseInt(x)+","+parseInt(y), rock);
 }
 
-for(let i = 0; i < 30; i++) {
+for(let i = 0; i < 5000; i++) {
+  let x = (Math.random()*2000)-1000
+  let y = (Math.random()*2000)-1000
   let tree = {
-    x: (Math.random()*500)-250,
-    y: (Math.random()*500)-250,
+    x: x,
+    y: y,
     width: 26,
     height: 14,
     thing: makeTree()
   }
-  statics.push(tree);
+  statics.set(parseInt(x)+","+parseInt(y), tree);
   }
 
 
@@ -287,11 +291,11 @@ let waterInterval = 0;
 function stringBuild(time) {
   waterInterval = 0
   let isInScreen = false;
-  playheight = window.innerHeight/18;
+  playheight = window.innerHeight/20;
   playwidth = window.innerWidth/18;
   var theString = "";
   let mobSpots = [];
-  let statSpots = [];
+  let statSpots = new Map();
   for(let j = playheight + statOverscan; j > 0; j--) {
     for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
       let iterationX = i+playx;
@@ -299,13 +303,14 @@ function stringBuild(time) {
       let heel = noiseValueFromCoord(i+playx, j+playy);
       let isMob = false;
       let isStat = false;
-      for(let s = 0; s < statics.length; s++) {
-        if(parseInt(statics[s].x) === parseInt(iterationX) && parseInt(statics[s].y) === parseInt(iterationY)) {
-          let statWidth = statics[s].width;
-          let statHeight = statics[s].height;
+      let coordChar = parseInt(iterationX)+","+parseInt(iterationY)
+      if(statics.has(coordChar)) {
+          let static = statics.get(coordChar)
+          let statWidth = static.width;
+          let statHeight = static.height;
           for(let t = 0; t < statHeight; t++) {
             for(let c = 0; c < statWidth; c++) {
-              let charOfTheStat = statics[s].thing.charAt((t*statWidth)+c) 
+              let charOfTheStat = static.thing.charAt((t*statWidth)+c) 
               if(charOfTheStat != "0") {
                 var statPixel = {
                   x: parseInt(iterationX) + c,
@@ -315,11 +320,13 @@ function stringBuild(time) {
                   statY: iterationY,
                   sHeight: statHeight
                 };
-                statSpots.unshift(statPixel);
+                if(!statSpots.has(parseInt(iterationX+c)+","+parseInt(iterationY-t))) {
+                  statSpots.set(parseInt(iterationX+c)+","+parseInt(iterationY-t),statPixel);
+                }
               }
             }
           }
-        }
+
       }
       for(let a = 0; a < mobiles.length; a++) {
         let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
@@ -330,11 +337,6 @@ function stringBuild(time) {
           let mobWidth = mobiles[a].width;
           let isInWater = isWater(mobiles[a].x, mobiles[a].y)
           let mobHeight = (isInWater) ? Math.floor(Math.min(mobiles[a].height+(noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].height)) : mobiles[a].height
-
-          if(a === 0) 
-          {
-            console.log(noiseValueFromCoord(mobiles[a].x, mobiles[a].y))
-          }
 
           if(mobiles[a].isWalking) {
             if(mobiles[a].foottimer > 100) {
@@ -380,17 +382,16 @@ function stringBuild(time) {
           mobPix = mobSpots[v];
         }
       }
-      for(let v = 0; v < statSpots.length; v++) {
-        if(statSpots[v].x === parseInt(iterationX) && statSpots[v].y === parseInt(iterationY)) {
+      if(statSpots.has(coordChar)) {
+        let statPix = statSpots.get(coordChar)
           if(isMob) {
-            if(mobPix.mobY-3 > statSpots[v].statY - statSpots[v].sHeight) {
-              rightnowbrick = statSpots[v].brick;
+            if(mobPix.mobY-3 > statPix.statY - statPix.sHeight) {
+              rightnowbrick = statPix.brick;
             }
           } else {
-          rightnowbrick = statSpots[v].brick;
+          rightnowbrick = statPix.brick;
           }
           isStat = true;
-        }
       }
       if(i > 0 && i < playwidth && j > 0 && j < playheight) {
         isInScreen = true;
@@ -584,6 +585,23 @@ function touchMoveMethod(event) {
   event.preventDefault();
 }
 
+let color1 = document.getElementById("foreColor")
+let color2 = document.getElementById("backColor")
+color1.oninput = setUserColor
+color2.oninput = setUserColor
+
+function setUserColor() {
+  let html = document.querySelector("html")
+  let color1 = document.getElementById("foreColor").value
+  let color2 = document.getElementById("backColor").value
+
+  if(color1 != "#000000") {
+    html.style.color = color1
+  }
+  html.style.backgroundColor = color2
+
+}
+
 let terminal = document.querySelector(".terminal");
 let form = document.querySelector("form");
 
@@ -624,7 +642,7 @@ updateTime();
   deltaTimes += deltaTime;
 }
 deltaTime = deltaTimes/amtToAverage;
-console.log(deltaTime);
+//console.log(deltaTime);
 setInterval(updateTime, 30);
 
 setInterval(removeChatMsg, 10000);
