@@ -77,6 +77,7 @@ class ImprovedNoise {
 }
 
 var levels = new Array(
+<<<<<<< Updated upstream
   "  ",
   "..",
   "::",
@@ -94,17 +95,353 @@ var firsttime = currentTime.getTime()
 function initial() {
   currentTime = new Date()
   firsttime = currentTime.getTime()
+=======
+  "@@",
+  "%%",
+  "##",
+  "==",
+  "==",
+  "::",
+  "..",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+);
+var currentTime = new Date()
+
+let deltaTime = 0;
+
+
+var playx = 0.0;
+var playy = 0.0;
+
+let mobSkins = [];
+
+const defaultSkin = [
+  "@@  @@"+
+  "  @@  "+
+  "@@  @@"+
+  "  ##  "+
+  "##  ##",
+
+  "@@    "+
+  "()@@  "+
+  "  ##@@"+
+  "[][][]"+
+  "##  ##",
+  
+  "  @@  "+
+  "()##()"+
+  "  @@  "+
+  "[]##[]"+
+  "##  ##",
+
+  "    @@"+
+  "  @@()"+
+  "@@##  "+
+  "[][][]"+
+  "##  ##"
+]
+const ginkSkin = //w, a, s, d 
+[
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%  ::@@@@@@%%" +
+    "%%@@@@@@@@@@%%" +
+    "::::@@@@@@@@%%" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%::  @@  ::%%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@::::::@@%%" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+
+    "%%%%%%%%%%%%%%" +
+    "%%%%@@@@@@%%%%" +
+    "%%@@@@@@::  %%" +
+    "%%@@@@@@@@@@%%" +
+    "%%@@@@@@@@::::" +
+    "%%@@%%@@@@@@%%" +
+    "%%%%%%%%%%%%%%",
+];
+
+mobSkins.push(defaultSkin)
+mobSkins.push(ginkSkin)
+
+var mobiles = [];
+var statics = new Map();
+
+function Mob(xa, ya) {
+
+  var mob = {
+    x: xa,
+    y: ya,
+    myIndex: mobiles.length
+  };
+
+  //mob.skin = skin;
+  
+  mobiles.set(xa+","+ya, mob);
+}
+
+Mob.prototype.setPosition = function(xa, ya) {
+  //mobiles[this.myIndex].x = xa;
+  //mobiles[this.myIndex].y = ya;
+>>>>>>> Stashed changes
 }
 
 var x = 0.0;
 var y = 0.0;
 
+<<<<<<< Updated upstream
 var width = 100;
 function stringBuild(time) {
   var theString = "";
   for(let j = window.innerHeight/16; j > 0; j--) {
     for(let i = 0; i < window.innerWidth/16; i++) {
       theString += levels[parseInt((10.0 + parseInt(ImprovedNoise.noise(parseFloat((i + x)/25.1), parseFloat(j + y)/25.1, 10.2)*10))/2)];
+=======
+for(let i = 0; i < 1300; i++) {
+  let x = (Math.random()*2000)-1000
+  let y = (Math.random()*2000)-1000
+  let rock = {
+    x: x,
+    y: y,
+    width: 8,
+    height: 4,
+    thing:
+    "000@@#00"+
+    "0#@@@##0" +
+    ":##@@@##" +
+    ".::###@#" 
+  }
+  statics.set(parseInt(x)+","+parseInt(y),rock);
+}
+
+for(let i = 0; i < 5000; i++) {
+  let x = (Math.random()*2000)-1000
+  let y = (Math.random()*2000)-1000
+  let tree = {
+    x: x,
+    y: y,
+    width: 26,
+    height: 14,
+    thing: makeTree()
+  }
+  statics.set(parseInt(x)+","+parseInt(y), tree);
+  }
+
+
+player = {
+  x: 0,
+  y: 0,
+  myIndex: mobiles.length,
+  direction: 0,
+  foottimer: 0.0,
+  isWalking: false,
+  leftfoot: false,
+  id: 1,
+  width:7,
+  height:7
+}
+mobiles.push(player)
+
+player2 = {
+  x: 0,
+  y: 0,
+  myIndex: mobiles.length,
+  direction: 3,
+  foottimer: 0.0,
+  isWalking: false,
+  leftfoot: false,
+  id: 0,
+  width:3,
+  height:5
+}
+mobiles.push(player2)
+
+player3 = {
+  x: 14,
+  y: 6,
+  myIndex: mobiles.length,
+  direction: 2,
+  foottimer: 0.0,
+  isWalking: false,
+  leftfoot: false,
+  id: 0,
+  width:3,
+  height:5
+}
+mobiles.push(player3)
+
+playheight = window.innerHeight/24;
+playwidth = window.innerWidth/18;
+let statOverscan = 12;
+let timerr = 0;
+
+function noiseValueFromCoord(i, j, scale, offset) {
+  let heel1 = ImprovedNoise.noise(parseFloat((i)/200.1), parseFloat(j)/200.1, 7.2)*levels.length+2;
+  let heel = parseInt((ImprovedNoise.noise(parseFloat((i)/50.1), parseFloat(j)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
+  if(scale != null && offset === null) {
+    return heel*scale;
+  } else
+  if(scale != null && offset != null) {
+    return (heel+offset) * scale;
+  } else {
+    return heel;
+  }
+}
+
+function isWater(x, y) {
+  return (noiseValueFromCoord(parseInt(x), parseInt(y)) < 1)
+}
+
+let waterInterval = 0;
+function stringBuild(time) {
+  waterInterval = 0
+  let isInScreen = false;
+  playheight = window.innerHeight/24;
+  playwidth = window.innerWidth/18;
+  var theString = "";
+  let mobSpots = [];
+  let statSpots = new Map();
+  for(let j = playheight + statOverscan; j > 0; j--) {
+    for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
+      let iterationX = i+playx;
+      let iterationY = j+playy;
+      let heel = noiseValueFromCoord(i+playx, j+playy);
+      let isMob = false;
+      let isStat = false;
+      let coordChar = parseInt(iterationX)+","+parseInt(iterationY)
+      if(statics.has(coordChar)) {
+        let static = statics.get(coordChar)
+        let statWidth = static.width;
+        let statHeight = static.height;
+        for(let t = 0; t < statHeight; t++) {
+          for(let c = 0; c < statWidth; c++) {
+            let charOfTheStat = static.thing.charAt((t*statWidth)+c) 
+            if(charOfTheStat != "0") {
+              var statPixel = {
+                x: parseInt(iterationX) + c,
+                y: parseInt(iterationY) - t,
+                brick: "" + charOfTheStat + charOfTheStat,
+                statX: iterationX,
+                statY: iterationY,
+                sHeight: statHeight
+              };
+              if(!statSpots.has(parseInt(iterationX+c)+","+parseInt(iterationY-t))) {
+                statSpots.set(parseInt(iterationX+c)+","+parseInt(iterationY-t), statPixel);
+              }
+            }
+          }
+        }
+
+      }
+      for(let a = 0; a < mobiles.length; a++) {
+        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
+        let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
+        if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
+          isMob = true;
+          let mobID = mobiles[a].id;
+          let mobWidth = mobiles[a].width;
+          let isInWater = isWater(mobiles[a].x, mobiles[a].y)
+          let mobHeight = (isInWater) ? Math.floor(Math.min(mobiles[a].height+(noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].height)) : mobiles[a].height
+
+
+          if(mobiles[a].isWalking) {
+            if(mobiles[a].foottimer > 100) {
+              mobiles[a].leftfoot = !mobiles[a].leftfoot;
+              mobiles[a].foottimer = 0;
+            } else {
+            mobiles[a].foottimer += deltaTime*5;
+            }
+          }
+          for(let m = 0; m < mobHeight; m++) {
+            for(let o = 0; o < mobWidth; o++) {
+              var mobPixel = {
+                x: parseInt(iterationX) + o,
+                y: parseInt(iterationY) - m,
+                brick: "" + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2)) + mobSkins[mobID][mobiles[a].direction].charAt((((m*mobWidth)+o)*2) + 1),
+                mobX: iterationX,
+                mobY: iterationY
+              };
+              if(!isInWater) {
+                if(o === mobWidth-1 && m === mobHeight-1) {
+                  if(mobiles[a].leftfoot) {
+                    mobPixel.brick = "  ";
+                  }
+                }
+                if(o === 0 && m === mobHeight-1) {
+                  if(!mobiles[a].leftfoot) {
+                    mobPixel.brick = "  ";
+                  }
+                }
+              }
+              mobSpots.unshift(mobPixel);
+            }
+          }
+          
+        }
+      }
+      let rightnowbrick = "";
+      let mobPix;
+      for(let v = 0; v < mobSpots.length; v++) {
+        if(mobSpots[v].x === parseInt(iterationX) && mobSpots[v].y === parseInt(iterationY)) {
+          rightnowbrick = mobSpots[v].brick;
+          isMob = true;
+          mobPix = mobSpots[v];
+        }
+      }
+      if(statSpots.has(coordChar)) {
+        let statPix = statSpots.get(coordChar)
+          if(isMob) {
+            if(mobPix.mobY-3 > statPix.statY - statPix.sHeight) {
+              rightnowbrick = statPix.brick;
+            }
+          } else {
+          rightnowbrick = statPix.brick;
+          }
+          isStat = true;
+      }
+      if(i > 0 && i < playwidth && j > 0 && j < playheight) {
+        isInScreen = true;
+        if(isMob || isStat) {
+          theString += rightnowbrick;
+        }else  {
+          if(heel <= levels.length-1 && heel > 0) {
+            theString += levels[heel];
+          } else {
+            if(heel > levels.length-1) {
+              theString += "  ";
+            } else {
+              let date = new Date()
+              if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/10000)*10) === 0 && parseInt((iterationY*playwidth)+iterationX)%4 === 0) {
+                theString += levels[0]
+              } else {
+                theString += "@@"
+              }
+            }
+          }
+        }
+      }
+    }
+    if(isInScreen) {
+      theString += "\n";
+>>>>>>> Stashed changes
     }
     theString += "\n";
   }
@@ -125,6 +462,20 @@ function updateTime(){
     deltaTime -= smallstep;
   }
 
+<<<<<<< Updated upstream
+=======
+  if(waterTimer > 100) {
+    waterTimer = 0;
+    water2 = !water2;
+  } else {
+    waterTimer += deltaTime;
+  }
+  if(water2) {
+    levels[0] = "@."
+  } else {
+    levels[0] = ".@"
+  }
+>>>>>>> Stashed changes
   
   
   
@@ -151,6 +502,42 @@ function updateTime(){
   
 }
 
+<<<<<<< Updated upstream
+=======
+let color1 = document.getElementById("foreColor")
+let color2 = document.getElementById("backColor")
+color1.oninput = setUserColor
+color2.oninput = setUserColor
+
+let terminal = document.querySelector(".terminal");
+let form = document.querySelector("form");
+
+form.onsubmit = function(event) {
+  event.preventDefault();
+  let text = document.getElementById("inputText").value;
+  let msg = document.createElement("p");
+  msg.textContent = text;
+  msg.setAttribute("id", "chatmsg")
+  terminal.appendChild(msg);
+  form.reset("#FFFFFF");
+}
+
+function setUserColor() {
+  let color1 = document.getElementById("foreColor").value
+  let color2 = document.getElementById("backColor").value
+  let html = document.querySelector("html")
+  if(color1 != "#000000") {
+    html.style.color = color1
+  }
+  html.style.backgroundColor = color2
+}
+
+function removeChatMsg() {
+  if(document.querySelector("#chatmsg") != null) {
+    terminal.removeChild(document.querySelector("#chatmsg"));
+  }
+}
+>>>>>>> Stashed changes
 
 var key = "d"
 window.addEventListener("keydown", function (event) {
@@ -165,6 +552,18 @@ window.addEventListener("keydown", function (event) {
 }, true);
 // the last option dispatches the event to the listener first,
 // then dispatches event to window
+<<<<<<< Updated upstream
+=======
+let deltaTimes = 0;
+let amtToAverage = 50;
+for(let i = 0; i < amtToAverage; i++) { //get an average delta time to speed the game ticks out
+updateTime();
+  deltaTimes += deltaTime;
+}
+deltaTime = deltaTimes/amtToAverage;
+//console.log(deltaTime);
+setInterval(updateTime, 30);
+>>>>>>> Stashed changes
 
 initial();
 setInterval(updateTime, 0);
