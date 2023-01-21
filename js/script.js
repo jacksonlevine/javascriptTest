@@ -78,18 +78,18 @@ class ImprovedNoise {
 
 onload = function() {
 var levels = new Array(
+  "@@",
+  "%%",
+  "==",
+  "::",
+  "::",
+  "..",
   "  ",
-  "..",
-  "..",
-  "::",
-  "::",
-  "==",
-  "==",
-  "==",
-  "==",
-  "==",
-  "==",
-  "==",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
 );
 var currentTime = new Date()
 
@@ -336,7 +336,7 @@ function stringBuild(time) {
           let mobID = mobiles[a].id;
           let mobWidth = mobiles[a].width;
           let isInWater = isWater(mobiles[a].x, mobiles[a].y)
-          let mobHeight = (isInWater) ? Math.floor(Math.min(mobiles[a].height+(noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -2)), mobiles[a].height)) : mobiles[a].height
+          let mobHeight = (isInWater) ? Math.floor(Math.min(mobiles[a].height+(noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, -1)), mobiles[a].height)) : mobiles[a].height
 
           if(mobiles[a].isWalking) {
             if(mobiles[a].foottimer > 100) {
@@ -402,13 +402,13 @@ function stringBuild(time) {
             theString += levels[heel];
           } else {
             if(heel > levels.length-1) {
-              theString += "%%";
+              theString += "  ";
             } else {
               let date = new Date()
               if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/10000)*10) === 0 && parseInt((iterationY*playwidth)+iterationX)%4 === 0) {
                 theString += levels[0]
               } else {
-                theString += "  "
+                theString += "@@"
               }
             }
           }
@@ -449,9 +449,9 @@ function updateTime(){
     waterTimer += deltaTime;
   }
   if(water2) {
-    levels[0] = " ."
+    levels[0] = "@."
   } else {
-    levels[0] = ". "
+    levels[0] = ".@"
   }
   
   if(isMyTouchDown) {
