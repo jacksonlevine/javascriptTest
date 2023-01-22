@@ -78,18 +78,18 @@ class ImprovedNoise {
 
 onload = function() {
 var levels = new Array(
-  "  ",
-  "  ",
-  ". ",
-  " .",
-  "..",
-  "::",
-  "-:",
-  "--",
-  "+-",
-  "++",
-  "*+",
-  "**",
+  "gg",
+  "gg",
+  "gg",
+  "gg",
+  "gg",
+  "aa",
+  "nn",
+  "rr",
+  "pp",
+  "ss",
+  "oo",
+  "qq",
 );
 var currentTime = new Date()
 
@@ -102,63 +102,63 @@ var playy = 0.0;
 let mobSkins = [];
 
 const defaultSkin = [
-  "@@  @@"+
-  "  @@  "+
-  "@@  @@"+
-  "  ##  "+
-  "##  ##",
+  "qqggqq"+
+  "ggqqgg"+
+  "qqggqq"+
+  "ggoogg"+
+  "ooggoo",
 
-  "@@    "+
-  "()@@  "+
-  "  ##@@"+
-  "[][][]"+
-  "##  ##",
+  "qqgggg"+
+  "xxqqgg"+
+  "ggooqq"+
+  "yyyyyy"+
+  "ooggoo",
   
-  "  @@  "+
-  "()##()"+
-  "  @@  "+
-  "[]##[]"+
-  "##  ##",
+  "ggqqgg"+
+  "xxooxx"+
+  "ggqqgg"+
+  "yyooyy"+
+  "ooggoo",
 
-  "    @@"+
-  "  @@()"+
-  "@@##  "+
-  "[][][]"+
-  "##  ##"
+  "ggggqq"+
+  "ggqqxx"+
+  "qqoogg"+
+  "yyyyyy"+
+  "ooggoo"
 ]
 const ginkSkin = //w, a, s, d 
 [
-    "%%%%%%%%%%%%%%" +
-    "%%%%@@@@@@%%%%" +
-    "%%@@@@@@@@@@%%" +
-    "%%@@@@@@@@@@%%" +
-    "%%@@@@@@@@@@%%" +
-    "%%@@%%@@@@@@%%" +
-    "%%%%%%%%%%%%%%",
+    "pppppppppppppp" +
+    "ppppqqqqqqpppp" +
+    "ppqqqqqqqqqqpp" +
+    "ppqqqqqqqqqqpp" +
+    "ppqqqqqqqqqqpp" +
+    "ppqqppqqqqqqpp" +
+    "pppppppppppppp",
 
-    "%%%%%%%%%%%%%%" +
-    "%%%%@@@@@@%%%%" +
-    "%%  ::@@@@@@%%" +
-    "%%@@@@@@@@@@%%" +
-    "::::@@@@@@@@%%" +
-    "%%@@%%@@@@@@%%" +
-    "%%%%%%%%%%%%%%",
+    "pppppppppppppp" +
+    "ppppqqqqqqpppp" +
+    "ppggaaqqqqqqpp" +
+    "ppqqqqqqqqqqpp" +
+    "aaaaqqqqqqqqpp" +
+    "ppqqppqqqqqqpp" +
+    "pppppppppppppp",
 
-    "%%%%%%%%%%%%%%" +
-    "%%%%@@@@@@%%%%" +
-    "%%::  @@  ::%%" +
-    "%%@@@@@@@@@@%%" +
-    "%%@@::::::@@%%" +
-    "%%@@%%@@@@@@%%" +
-    "%%%%%%%%%%%%%%",
+    "pppppppppppppp" +
+    "ppppqqqqqqpppp" +
+    "ppaaggqqggaapp" +
+    "ppqqqqqqqqqqpp" +
+    "ppqqaaaaaaqqpp" +
+    "ppqqppqqqqqqpp" +
+    "pppppppppppppp",
 
-    "%%%%%%%%%%%%%%" +
-    "%%%%@@@@@@%%%%" +
-    "%%@@@@@@::  %%" +
-    "%%@@@@@@@@@@%%" +
-    "%%@@@@@@@@::::" +
-    "%%@@%%@@@@@@%%" +
-    "%%%%%%%%%%%%%%",
+    "pppppppppppppp" +
+    "ppppqqqqqqpppp" +
+    "ppqqqqqqaaggpp" +
+    "ppqqqqqqqqqqpp" +
+    "ppqqqqqqqqaaaa" +
+    "ppqqppqqqqqqpp" +
+    "pppppppppppppp",
 ];
 
 mobSkins.push(defaultSkin)
@@ -201,10 +201,10 @@ let rock = {
   width: 8,
   height: 4,
   thing:
-  "000@@#00"+
-  "0#@@@##0" +
-  ":##@@@##" +
-  ".::###@#" 
+  "000qqo00"+
+  "0oqqqoo0" +
+  "aooqqqoo" +
+  "gaaoooqo" 
 }
 statics.set(parseInt(x)+","+parseInt(y), rock);
 }
@@ -359,12 +359,12 @@ function stringBuild(time) {
               if(!isInWater) {
                 if(o === mobWidth-1 && m === mobHeight-1) {
                   if(mobiles[a].leftfoot) {
-                    mobPixel.brick = "  ";
+                    mobPixel.brick = "gg";
                   }
                 }
                 if(o === 0 && m === mobHeight-1) {
                   if(!mobiles[a].leftfoot) {
-                    mobPixel.brick = "  ";
+                    mobPixel.brick = "gg";
                   }
                 }
               }
@@ -409,7 +409,7 @@ function stringBuild(time) {
               if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/10000)*10) === 0 && parseInt((iterationY*playwidth)+iterationX)%4 === 0) {
                 theString += levels[0]
               } else {
-                theString += "  "
+                theString += "gg"
               }
             }
           }
@@ -450,9 +450,9 @@ function updateTime(){
     waterTimer += deltaTime;
   }
   if(water2) {
-    levels[0] = " ."
+    levels[0] = "gx"
   } else {
-    levels[0] = ". "
+    levels[0] = "xg"
   }
   
   if(isMyTouchDown) {
@@ -739,10 +739,10 @@ function makeTree() {
           string += "0";
         }
         if(intString[(j*width)+i] === 1) {
-          string += "#";
+          string += "a";
         }
         if(intString[(j*width)+i] === 2) {
-          string += "@";
+          string += "q";
         }
       }
       //string += "\n"; only for readability
