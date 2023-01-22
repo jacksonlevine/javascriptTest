@@ -78,18 +78,18 @@ class ImprovedNoise {
 
 onload = function() {
 var levels = new Array(
-  "@@",
-  "%%",
-  "==",
-  "::",
-  "::",
+  "  ",
+  "  ",
+  ". ",
+  " .",
   "..",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
+  "::",
+  "-:",
+  "--",
+  "+-",
+  "++",
+  "*+",
+  "**",
 );
 var currentTime = new Date()
 
@@ -267,7 +267,7 @@ mobiles.push(player3)
 
 playheight = window.innerHeight/24;
 playwidth = window.innerWidth/18;
-let statOverscan = 12;
+let statOverscan = 20;
 let timerr = 0;
 
 function noiseValueFromCoord(i, j, scale, offset) {
@@ -291,10 +291,10 @@ let waterInterval = 0;
 function stringBuild(time) {
   waterInterval = 0
   let isInScreen = false;
-  playheight = window.innerHeight/20;
-  playwidth = window.innerWidth/18;
+  playheight = window.innerHeight/10;
+  playwidth = window.innerWidth/14;
   var theString = "";
-  let mobSpots = [];
+  let mobSpots = new Map();
   let statSpots = new Map();
   for(let j = playheight + statOverscan; j > 0; j--) {
     for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
@@ -329,7 +329,8 @@ function stringBuild(time) {
 
       }
       for(let a = 0; a < mobiles.length; a++) {
-        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
+        let mobY = (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)) + mobiles[a].height 
+        //let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
         let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
         if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
           isMob = true;
@@ -367,20 +368,20 @@ function stringBuild(time) {
                   }
                 }
               }
-              mobSpots.unshift(mobPixel);
+              if(!mobSpots.has(parseInt(iterationX + o)+","+parseInt(iterationY-m))) {
+                mobSpots.set(parseInt(iterationX + o)+","+parseInt(iterationY-m), mobPixel);
+              }
             }
           }
           
         }
       }
-      let rightnowbrick = "";
-      let mobPix;
-      for(let v = 0; v < mobSpots.length; v++) {
-        if(mobSpots[v].x === parseInt(iterationX) && mobSpots[v].y === parseInt(iterationY)) {
-          rightnowbrick = mobSpots[v].brick;
-          isMob = true;
-          mobPix = mobSpots[v];
-        }
+      let mobPix
+      let rightnowbrick = ""
+      if(mobSpots.has(coordChar)) {
+        mobPix = mobSpots.get(coordChar)
+        rightnowbrick = mobPix.brick;
+        isMob = true;
       }
       if(statSpots.has(coordChar)) {
         let statPix = statSpots.get(coordChar)
@@ -402,13 +403,13 @@ function stringBuild(time) {
             theString += levels[heel];
           } else {
             if(heel > levels.length-1) {
-              theString += "  ";
+              theString += levels[levels.length-1]
             } else {
               let date = new Date()
               if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/10000)*10) === 0 && parseInt((iterationY*playwidth)+iterationX)%4 === 0) {
                 theString += levels[0]
               } else {
-                theString += "@@"
+                theString += "  "
               }
             }
           }
@@ -436,8 +437,8 @@ function updateTime(){
   var firsttime = currentTime.getTime()
   
   var smallstep = 10;
-  mobiles[player.myIndex].x = playx+ (playwidth/2) + (mobiles[player.myIndex].width/2);
-  mobiles[player.myIndex].y = playy+(playheight/2) - (mobiles[player.myIndex].height);
+  mobiles[player.myIndex].x = playx+ (playwidth/2) + (mobiles[player.myIndex].width/5);
+  mobiles[player.myIndex].y = playy+(playheight/2) - (mobiles[player.myIndex].height/2);
   while(deltaTime > smallstep) {
     deltaTime -= smallstep;
   }
@@ -449,9 +450,9 @@ function updateTime(){
     waterTimer += deltaTime;
   }
   if(water2) {
-    levels[0] = "@."
+    levels[0] = " ."
   } else {
-    levels[0] = ".@"
+    levels[0] = ". "
   }
   
   if(isMyTouchDown) {
