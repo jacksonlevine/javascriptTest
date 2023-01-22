@@ -209,7 +209,7 @@ let rock = {
 statics.set(parseInt(x)+","+parseInt(y), rock);
 }
 
-for(let i = 0; i < 5000; i++) {
+for(let i = 0; i < 2000; i++) {
   let x = (Math.random()*2000)-1000
   let y = (Math.random()*2000)-1000
   let tree = {
@@ -221,6 +221,45 @@ for(let i = 0; i < 5000; i++) {
   }
   statics.set(parseInt(x)+","+parseInt(y), tree);
   }
+
+  for(let i = 0; i < 3000; i++) {
+    let x = (Math.random()*2000)-1000
+    let y = (Math.random()*2000)-1000
+    let tree = {
+      x: x,
+      y: y,
+      width: 25,
+      height: 25,
+      thing: makeBigTree()
+    }
+    statics.set(parseInt(x)+","+parseInt(y), tree);
+    }
+
+    for(let i = 0; i < 2000; i++) {
+      let x = (Math.random()*2000)+1000
+      let y = (Math.random()*2000)+500
+      let tree = {
+        x: x,
+        y: y,
+        width: 26,
+        height: 14,
+        thing: makeTree()
+      }
+      statics.set(parseInt(x)+","+parseInt(y), tree);
+      }
+    
+    for(let i = 0; i < 3000; i++) {
+      let x = (Math.random()*2000)+7000
+      let y = (Math.random()*2000)+750
+      let tree = {
+        x: x,
+        y: y,
+        width: 25,
+        height: 25,
+        thing: makeBigTree()
+      }
+      statics.set(parseInt(x)+","+parseInt(y), tree);
+      }
 
 
 player = {
@@ -287,7 +326,8 @@ function noiseValueFromCoord(i, j, scale, offset) {
 function isWater(x, y) {
   return (noiseValueFromCoord(parseInt(x), parseInt(y)) < 1)
 }
-
+let mobSpots = new Map();
+let statSpots = new Map();
 let waterInterval = 0;
 function stringBuild(time) {
   waterInterval = 0
@@ -295,10 +335,42 @@ function stringBuild(time) {
   playheight = window.innerHeight/16;
   playwidth = window.innerWidth/16;
   var theString = "";
-  let mobSpots = new Map();
-  let statSpots = new Map();
+  mobSpots = new Map();
+  statSpots = new Map();
   for(let j = playheight + statOverscan; j > 0; j--) {
-    for(let i = -statOverscan; i < playwidth + statOverscan; i++) {
+    for(let i = -statOverscan; i < playwidth + statOverscan; i+= 19) {
+      theString += oneCharStringBuild(i, j);
+      theString += oneCharStringBuild(i+1, j);
+      theString += oneCharStringBuild(i+2, j);
+      theString += oneCharStringBuild(i+3, j);
+      theString += oneCharStringBuild(i+4, j);
+      theString += oneCharStringBuild(i+5, j);
+      theString += oneCharStringBuild(i+6, j);
+      theString += oneCharStringBuild(i+7, j);
+      theString += oneCharStringBuild(i+8, j);
+      theString += oneCharStringBuild(i+9, j);
+      theString += oneCharStringBuild(i+10, j);
+      theString += oneCharStringBuild(i+11, j);
+      theString += oneCharStringBuild(i+12, j);
+      theString += oneCharStringBuild(i+13, j);
+      theString += oneCharStringBuild(i+14, j);
+      theString += oneCharStringBuild(i+15, j);
+      theString += oneCharStringBuild(i+16, j);
+      theString += oneCharStringBuild(i+17, j);
+      theString += oneCharStringBuild(i+18, j);
+    }
+    if(j < playheight) {
+      theString += "\n";
+    }
+  }
+  return theString;
+}
+
+
+
+function oneCharStringBuild(i, j) {
+  waterInterval = 0
+  var theString = "";
       let iterationX = i+playx;
       let iterationY = j+playy;
       let heel = noiseValueFromCoord(i+playx, j+playy);
@@ -330,7 +402,6 @@ function stringBuild(time) {
 
       }
       for(let a = 0; a < mobiles.length; a++) {
-        //let mobY = (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)) + mobiles[a].height 
         let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, .5, 0))) + mobiles[a].height;
         let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
         if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
@@ -399,29 +470,24 @@ function stringBuild(time) {
       if(i > 0 && i < playwidth && j > 0 && j < playheight) {
         isInScreen = true;
         if(isMob || isStat) {
-          theString += rightnowbrick;
+          theString = rightnowbrick;
         }else  {
           if(heel <= levels.length-1 && heel > 0) {
-            theString += levels[heel];
+            theString = levels[heel];
           } else {
             if(heel > levels.length-1) {
-              theString += levels[levels.length-1]
+              theString = levels[levels.length-1]
             } else {
               let date = new Date()
               if(parseInt(ImprovedNoise.noise(parseFloat(iterationX)/10, parseFloat(iterationY)/10, date.getTime()/10000)*10) === 0 && parseInt((iterationY*playwidth)+iterationX)%4 === 0) {
-                theString += levels[0]
+                theString = levels[0]
               } else {
-                theString += "gg"
+                theString = "gg"
               }
             }
           }
         }
       }
-    }
-    if(isInScreen) {
-      theString += "\n";
-    }
-  }
   return theString;
 }
 
@@ -512,7 +578,7 @@ function updateTime(){
           break;
         default:
           mobiles[player.myIndex].isWalking = false;
-          key = "null"; // Quit when this doesn't handle the key event.
+          key = "null"; 
       }
     }
   }
@@ -520,7 +586,6 @@ function updateTime(){
   var time = currentTime.getTime()
   
   deltaTime += time - firsttime;
-  //console.log(deltaTime);
 }
 
 
@@ -533,7 +598,7 @@ window.addEventListener("touchstart", touchStartMethod, true);
 
 function touchStartMethod(event) {
   if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
+    return;
   }
 
   for(var i = 0; i < event.touches.length; i++) {
@@ -543,7 +608,6 @@ function touchStartMethod(event) {
   }
   isMyTouchDown = true;
 
-  // Cancel the default action to avoid it being handled twice
   event.preventDefault();
 }
 
@@ -552,12 +616,12 @@ window.addEventListener("touchend", touchEndMethod, true);
 
 function touchEndMethod(event) {
   if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
+    return; 
   }
 
   isMyTouchDown = false;
 
-  // Cancel the default action to avoid it being handled twice
+
   event.preventDefault();
 }
 
@@ -566,14 +630,9 @@ var xdifferential = 0;
 
 window.addEventListener("touchmove", touchMoveMethod, true);
 
-/*let mainPar = document.getElementById("time_span");
-mainPar.addEventListener("touchmove", touchMoveMethod, true);
-mainPar.addEventListener("touchstart", touchStartMethod, true);
-mainPar.addEventListener("touchend", touchEndMethod, true);*/
-
 function touchMoveMethod(event) {
   if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
+    return;
   }
 
   
@@ -584,7 +643,6 @@ function touchMoveMethod(event) {
       event.preventDefault();
     }
   }
-  // Cancel the default action to avoid it being handled twice
   event.preventDefault();
 }
 
@@ -626,26 +684,24 @@ function removeChatMsg() {
 
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
+    return;
   }
 
   key = event.key;
 
-  // Cancel the default action to avoid it being handled twice
   if((document.activeElement).getAttribute("type") != "text" ) {
   event.preventDefault();
   }
 }, true);
-// the last option dispatches the event to the listener first,
-// then dispatches event to window
+
 let deltaTimes = 0;
 let amtToAverage = 50;
-for(let i = 0; i < amtToAverage; i++) { //get an average delta time to speed the game ticks out
+for(let i = 0; i < amtToAverage; i++) {
 updateTime();
   deltaTimes += deltaTime;
 }
 deltaTime = deltaTimes/amtToAverage;
-//console.log(deltaTime);
+
 setInterval(updateTime, 30);
 
 setInterval(removeChatMsg, 10000);
@@ -747,7 +803,115 @@ function makeTree() {
           string += "t";
         }
       }
-      //string += "\n"; only for readability
+    }
+    return string;
+}
+
+function makeBigTree() {
+  let intString = []
+  let width = 25;
+  let height = 25;
+  let amplitudeX = 3;
+    for(let j = 0; j < width; j++) {
+      for(let i = 0; i < height; i++) {
+        intString.push(0);
+      }
+    }
+    let initialSpot = {
+      x: parseInt(width/2),
+      y: height-1
+    }
+    let initialDirection = {
+      x: (Math.random()-0.5),
+      y: 1
+    }
+    let trunkheight = Math.min(Math.random()*12, 5);
+    let nextSpot = {
+      x: 0,
+      y: 0
+    }
+    for(let i = 0; i < trunkheight; i++) {
+      intString[(parseInt(initialSpot.y)*width)+parseInt(initialSpot.x)] = 1;
+      initialSpot.x += initialDirection.x;
+      initialSpot.y -= initialDirection.y;
+      nextSpot.x = initialSpot.x;
+      nextSpot.y = initialSpot.y;
+    }
+    let nextSpots = [];
+    for(let i = 0; i < 3; i++) {
+      let branchlength = Math.min(Math.random()*8, 6);
+      let nextSpot2 = {
+        x: 0,
+        y: 0
+      }
+      let newDirection = {
+        x: (Math.random()-0.5)*amplitudeX,
+        y: 1
+      }
+      for(let b = 0; b < branchlength; b++) {
+        intString[(parseInt(nextSpot.y)*width)+parseInt(nextSpot.x)] = 1;
+        nextSpot.x += newDirection.x;
+        nextSpot.y -= newDirection.y;
+        nextSpot2.x = initialSpot.x;
+        nextSpot2.y = initialSpot.y;
+      }
+      nextSpots.push(nextSpot2);
+    }
+    nextSpotsClone = [...nextSpots];
+    let leafspots = [];
+    for(let i = 0; i < 3; i++) {
+      for(let t = 0; t < 3; t++) {
+        let finlength = Math.min(Math.random()*8, 6);
+        let newDirection = {
+          x: (Math.random()-0.5)*amplitudeX,
+          y: 1
+        }
+        let endOfThisBranch = {
+          x: 0,
+          y: 0
+        }
+        for(let b = 0; b < finlength; b++) {
+          intString[(parseInt(nextSpots[i].y)*width)+parseInt(nextSpots[i].x)] = 1;
+          nextSpots[i].x += newDirection.x;
+          nextSpots[i].y -= newDirection.y;
+          endOfThisBranch.x = nextSpots[i].x;
+          endOfThisBranch.y = nextSpots[i].y;
+        }
+        leafspots.push(endOfThisBranch);
+      }
+      nextSpots = [...nextSpotsClone]
+    }
+    for(let i of leafspots) {
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x-1)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x-1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x-2)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x+2)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x-2)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x+2)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x-2)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x+2)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x-2)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x+2)] = 2;
+      intString[(parseInt(i.y-2)*width)+parseInt(i.x-1)] = 2;
+      intString[(parseInt(i.y-2)*width)+parseInt(i.x+1)] = 2;
+    }
+    let string = ""
+    for(let j = 0; j < height; j++) {
+      for(let i = 0; i < width; i++) {
+        if(intString[(j*width)+i] === 0) {
+          string += "0";
+        }
+        if(intString[(j*width)+i] === 1) {
+          string += "a";
+        }
+        if(intString[(j*width)+i] === 2) {
+          string += "t";
+        }
+      }
     }
     return string;
 }
