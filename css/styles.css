@@ -17,8 +17,8 @@ html {
   touch-action: none;
   overscroll-behavior-y: contain;
   white-space: pre;
-  font-size:50%;
-  line-height:5px;
+  font-size:70%;
+  line-height:7px;
   transform: scaleY(2) translateY(20%);
   
 }
@@ -82,7 +82,7 @@ html {
   height:30px;
   margin:0 10%;
   width:100%;
-  transform: translateY(-75px);
+
 }
 
 #inputText {
@@ -99,5 +99,5 @@ html {
 #afterward {
   margin:0 10%;
   text-align: left;
-  transform: translateY(-75px);
+  transform: translateY(-50px);
 }
