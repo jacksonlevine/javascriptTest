@@ -271,8 +271,9 @@ let statOverscan = 20;
 let timerr = 0;
 
 function noiseValueFromCoord(i, j, scale, offset) {
-  let heel1 = ImprovedNoise.noise(parseFloat((i)/200.1), parseFloat(j)/200.1, 7.2)*levels.length+2;
-  let heel = parseInt((ImprovedNoise.noise(parseFloat((i)/50.1), parseFloat(j)/50.1, 10.2)*levels.length+2) + parseFloat(heel1));
+  let heel2 = ImprovedNoise.noise(parseFloat((i)/5.1), parseFloat(j)/5.1, 7.2)*2;
+  let heel1 = ImprovedNoise.noise(parseFloat((i)/300.1), parseFloat(j)/300.1, 7.2)*levels.length+2;
+  let heel = parseInt((ImprovedNoise.noise(parseFloat((i)/50.1), parseFloat(j)/50.1, 10.2)*levels.length+2) + parseFloat(heel1)+ parseFloat(heel2));
   if(scale != null && offset === null) {
     return heel*scale;
   } else
@@ -329,11 +330,10 @@ function stringBuild(time) {
 
       }
       for(let a = 0; a < mobiles.length; a++) {
-        let mobY = (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)) + mobiles[a].height 
-        //let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : mobiles[a].y) + mobiles[a].height;
+        //let mobY = (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)) + mobiles[a].height 
+        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, .5, 0))) + mobiles[a].height;
         let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
         if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
-          isMob = true;
           let mobID = mobiles[a].id;
           let mobWidth = mobiles[a].width;
           let isInWater = isWater(mobiles[a].x, mobiles[a].y)
@@ -376,7 +376,7 @@ function stringBuild(time) {
           
         }
       }
-      let mobPix
+      let mobPix = {}
       let rightnowbrick = ""
       if(mobSpots.has(coordChar)) {
         mobPix = mobSpots.get(coordChar)
@@ -386,8 +386,10 @@ function stringBuild(time) {
       if(statSpots.has(coordChar)) {
         let statPix = statSpots.get(coordChar)
           if(isMob) {
-            if(mobPix.mobY-3 > statPix.statY - statPix.sHeight) {
-              rightnowbrick = statPix.brick;
+            if(Object.hasOwn(mobPix, 'mobY')) {
+              if(mobPix.mobY-5 > statPix.statY - statPix.sHeight) {
+                rightnowbrick = statPix.brick;
+              }
             }
           } else {
           rightnowbrick = statPix.brick;
@@ -437,8 +439,8 @@ function updateTime(){
   var firsttime = currentTime.getTime()
   
   var smallstep = 10;
-  mobiles[player.myIndex].x = playx+ (playwidth/2) + (mobiles[player.myIndex].width/5);
-  mobiles[player.myIndex].y = playy+(playheight/2) - (mobiles[player.myIndex].height/2);
+  mobiles[player.myIndex].x = parseInt(playx) + parseInt(playwidth/2) + parseInt(mobiles[player.myIndex].width/5);
+  mobiles[player.myIndex].y = parseInt(playy) + parseInt(playheight/2) - (mobiles[player.myIndex].height);
   while(deltaTime > smallstep) {
     deltaTime -= smallstep;
   }
@@ -742,7 +744,7 @@ function makeTree() {
           string += "a";
         }
         if(intString[(j*width)+i] === 2) {
-          string += "q";
+          string += "t";
         }
       }
       //string += "\n"; only for readability

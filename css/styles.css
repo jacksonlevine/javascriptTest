@@ -18,7 +18,7 @@ html {
   overscroll-behavior-y: contain;
   white-space: pre;
   font-size:70%;
-  line-height:7px;
+  line-height:8px;
   transform: scaleY(2) translateY(20%);
   
 }
