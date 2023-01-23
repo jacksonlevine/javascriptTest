@@ -328,15 +328,17 @@ function isWater(x, y) {
 }
 let mobSpots = new Map();
 let statSpots = new Map();
+overSpots = new Map();
 let waterInterval = 0;
 function stringBuild(time) {
   waterInterval = 0
   let isInScreen = false;
-  playheight = window.innerHeight/24;
+  playheight = window.innerHeight/18;
   playwidth = window.innerWidth/24;
   var theString = "";
   mobSpots = new Map();
   statSpots = new Map();
+  overSpots = new Map();
   for(let j = playheight + statOverscan; j > 0; j--) {
     for(let i = -statOverscan; i < playwidth + statOverscan; i+= 19) {
       theString += oneCharStringBuild(i, j);
@@ -366,7 +368,9 @@ function stringBuild(time) {
   return theString;
 }
 
-
+let miniMapX = 3;
+let miniMapY = 30;
+let miniMapWidth = 13;
 
 function oneCharStringBuild(i, j) {
   waterInterval = 0
@@ -377,29 +381,66 @@ function oneCharStringBuild(i, j) {
       let isMob = false;
       let isStat = false;
       let coordChar = parseInt(iterationX)+","+parseInt(iterationY)
-      if(statics.has(coordChar)) {
-          let static = statics.get(coordChar)
-          let statWidth = static.width;
-          let statHeight = static.height;
-          for(let t = 0; t < statHeight; t++) {
-            for(let c = 0; c < statWidth; c++) {
-              let charOfTheStat = static.thing.charAt((t*statWidth)+c) 
-              if(charOfTheStat != "0") {
-                var statPixel = {
-                  x: parseInt(iterationX) + c,
-                  y: parseInt(iterationY) - t,
-                  brick: "" + charOfTheStat + charOfTheStat,
-                  statX: iterationX,
-                  statY: iterationY,
-                  sHeight: statHeight
-                };
-                if(!statSpots.has(parseInt(iterationX+c)+","+parseInt(iterationY-t))) {
-                  statSpots.set(parseInt(iterationX+c)+","+parseInt(iterationY-t),statPixel);
+
+      if(parseInt(i) === 3 && parseInt(j) === 20) {
+        for(let m = miniMapWidth; m > 0; m--) {
+          for(let n = 0; n < miniMapWidth; n++)  {
+            let mmSpot = parseInt(iterationX+n)+","+parseInt(iterationY-m)
+            let localX = parseFloat(mobiles[player.myIndex].x+(n*25)-(miniMapWidth*12));
+            let localY = parseFloat(mobiles[player.myIndex].y-(m*25)+(miniMapWidth*12));
+            let overPix;
+            if(Math.abs(localX-mobiles[player.myIndex].x) <= 10 && Math.abs(localY-mobiles[player.myIndex].y) <= 10) {
+              overPix = {
+                brick: "yy"
+              }
+              if(!overSpots.has(mmSpot)) {
+                overSpots.set(mmSpot, overPix)
+              }
+            } else {
+              if(parseInt(noiseValueFromCoord(localX/2, localY/2)) > 0) {
+              overPix = {
+                brick: levels[Math.min(parseInt(noiseValueFromCoord(localX/2, localY/2)),levels.length-1)]
+                
+              }
+            } else {
+              overPix = {
+                brick: levels[0]
+                
+              }
+            }
+              if(!overSpots.has(mmSpot)) {
+                overSpots.set(mmSpot, overPix)
+              }
+            }
+            
+          }
+        }
+      } else {
+      
+        if(statics.has(coordChar)) {
+            let static = statics.get(coordChar)
+            let statWidth = static.width;
+            let statHeight = static.height;
+            for(let t = 0; t < statHeight; t++) {
+              for(let c = 0; c < statWidth; c++) {
+                let charOfTheStat = static.thing.charAt((t*statWidth)+c) 
+                if(charOfTheStat != "0") {
+                  var statPixel = {
+                    x: parseInt(iterationX) + c,
+                    y: parseInt(iterationY) - t,
+                    brick: "" + charOfTheStat + charOfTheStat,
+                    statX: iterationX,
+                    statY: iterationY,
+                    sHeight: statHeight
+                  };
+                  if(!statSpots.has(parseInt(iterationX+c)+","+parseInt(iterationY-t))) {
+                    statSpots.set(parseInt(iterationX+c)+","+parseInt(iterationY-t),statPixel);
+                  }
                 }
               }
             }
-          }
 
+        }
       }
       for(let a = 0; a < mobiles.length; a++) {
         let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, .5, 0))) + mobiles[a].height;
@@ -447,15 +488,20 @@ function oneCharStringBuild(i, j) {
           
         }
       }
+      let isOverlay = false;
       let mobPix = {}
       let rightnowbrick = ""
-      if(mobSpots.has(coordChar)) {
-        mobPix = mobSpots.get(coordChar)
-        rightnowbrick = mobPix.brick;
-        isMob = true;
-      }
-      if(statSpots.has(coordChar)) {
-        let statPix = statSpots.get(coordChar)
+      if(overSpots.has(coordChar)) {
+        isOverlay = true;
+        rightnowbrick = overSpots.get(coordChar).brick;
+      } else {
+        if(mobSpots.has(coordChar)) {
+          mobPix = mobSpots.get(coordChar)
+          rightnowbrick = mobPix.brick;
+          isMob = true;
+        }
+        if(statSpots.has(coordChar)) {
+          let statPix = statSpots.get(coordChar)
           if(isMob) {
             if(Object.hasOwn(mobPix, 'mobY')) {
               if(mobPix.mobY-5 > statPix.statY - statPix.sHeight) {
@@ -463,13 +509,14 @@ function oneCharStringBuild(i, j) {
               }
             }
           } else {
-          rightnowbrick = statPix.brick;
+            rightnowbrick = statPix.brick;
           }
           isStat = true;
+        }
       }
       if(i > 0 && i < playwidth && j > 0 && j < playheight) {
         isInScreen = true;
-        if(isMob || isStat) {
+        if(isMob || isStat || isOverlay) {
           theString = rightnowbrick;
         }else  {
           if(heel <= levels.length-1 && heel > 0) {
