@@ -17,8 +17,8 @@ html {
   touch-action: none;
   overscroll-behavior-y: contain;
   white-space: pre;
-  font-size:70%;
-  line-height:8px;
+  font-size:90%;
+  line-height:10px;
   transform: scaleY(2) translateY(20%);
   
 }

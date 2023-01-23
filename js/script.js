@@ -332,8 +332,8 @@ let waterInterval = 0;
 function stringBuild(time) {
   waterInterval = 0
   let isInScreen = false;
-  playheight = window.innerHeight/16;
-  playwidth = window.innerWidth/16;
+  playheight = window.innerHeight/24;
+  playwidth = window.innerWidth/24;
   var theString = "";
   mobSpots = new Map();
   statSpots = new Map();
