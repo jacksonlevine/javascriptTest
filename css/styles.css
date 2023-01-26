@@ -18,9 +18,16 @@ html {
   overscroll-behavior-y: contain;
   white-space: pre;
   font-size:90%;
-  line-height:10px;
+  line-height:10.68px;
   transform: scaleY(2) translateY(20%);
   z-index:-1;
+  
+}
+
+@media screen and (max-width: 1000) {
+  #subcontainer {
+    transform:translateY(180px);
+  }
   
 }
 

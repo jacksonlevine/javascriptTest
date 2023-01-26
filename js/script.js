@@ -539,11 +539,19 @@ function oneCharStringBuild(i, j) {
 }
 
 let mmWidth = 15;
+let mmHeight = 15;
 function miniMapString() {
-  mmWidth = playwidth/5;
+  if(playwidth < playheight) {
+    mmWidth = playwidth/5;
+    mmHeight = playheight/3;
+  } else {
+    mmWidth = playwidth/5;
+    mmHeight = playwidth/5;
+  }
+  
   let stringy = "";
-  for(let y = mobiles[player.myIndex].y + (mmWidth*4); y > mobiles[player.myIndex].y-(mmWidth*4); y-=4) {
-    for(let x = mobiles[player.myIndex].x - (mmWidth*4); x < mobiles[player.myIndex].x + (mmWidth*4); x+=4) {
+  for(let y = mobiles[player.myIndex].y + (mmHeight*8); y > mobiles[player.myIndex].y-(mmHeight*8); y-=8) {
+    for(let x = mobiles[player.myIndex].x - (mmWidth*8); x < mobiles[player.myIndex].x + (mmWidth*8); x+=8) {
       if(Math.floor(noiseValueFromCoord(x, y)) > 0) {
         stringy += levels[Math.min(parseInt(noiseValueFromCoord(x, y)),levels.length-1)];
       } else {
@@ -556,7 +564,7 @@ function miniMapString() {
 }
 function miniMap2String() {
   let stringy = "";
-  for(let y = mobiles[player.myIndex].y + mmWidth; y > mobiles[player.myIndex].y-mmWidth; y--) {
+  for(let y = mobiles[player.myIndex].y + mmHeight; y > mobiles[player.myIndex].y-mmHeight; y--) {
     for(let x = mobiles[player.myIndex].x - mmWidth; x < mobiles[player.myIndex].x + mmWidth; x++) {
       if(statics.has(Math.round(x)+","+Math.round(y))) {
         stringy += "qq";
