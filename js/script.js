@@ -333,7 +333,7 @@ let waterInterval = 0;
 function stringBuild(time) {
   waterInterval = 0
   let isInScreen = false;
-  playheight = window.innerHeight/18;
+  playheight = window.innerHeight/24;
   playwidth = window.innerWidth/24;
   var theString = "";
   mobSpots = new Map();
@@ -399,12 +399,12 @@ function oneCharStringBuild(i, j) {
             } else {
               if(parseInt(noiseValueFromCoord(localX/2, localY/2)) > 0) {
               overPix = {
-                brick: levels[Math.min(parseInt(noiseValueFromCoord(localX/2, localY/2)),levels.length-1)]
+                brick: "gg"
                 
               }
             } else {
               overPix = {
-                brick: levels[0]
+                brick: "gg"
                 
               }
             }
@@ -538,6 +538,37 @@ function oneCharStringBuild(i, j) {
   return theString;
 }
 
+let mmWidth = 15;
+function miniMapString() {
+  mmWidth = playwidth/5;
+  let stringy = "";
+  for(let y = mobiles[player.myIndex].y + (mmWidth*4); y > mobiles[player.myIndex].y-(mmWidth*4); y-=4) {
+    for(let x = mobiles[player.myIndex].x - (mmWidth*4); x < mobiles[player.myIndex].x + (mmWidth*4); x+=4) {
+      if(Math.floor(noiseValueFromCoord(x, y)) > 0) {
+        stringy += levels[Math.min(parseInt(noiseValueFromCoord(x, y)),levels.length-1)];
+      } else {
+        stringy += "gg";
+      }
+    }
+    stringy += "\n";
+  }
+  return stringy;
+}
+function miniMap2String() {
+  let stringy = "";
+  for(let y = mobiles[player.myIndex].y + mmWidth; y > mobiles[player.myIndex].y-mmWidth; y--) {
+    for(let x = mobiles[player.myIndex].x - mmWidth; x < mobiles[player.myIndex].x + mmWidth; x++) {
+      if(statics.has(Math.round(x)+","+Math.round(y))) {
+        stringy += "qq";
+      } else {
+        stringy += "gg";
+      }
+    }
+    stringy += "\n";
+  }
+  return stringy;
+}
+
 let water2 = false;
 let waterTimer = 0;
 
@@ -598,7 +629,9 @@ function updateTime(){
     }
   }
   
-  document.getElementById('time_span').textContent = "" + stringBuild(time)
+  document.getElementById('time_span').textContent = "" + stringBuild(time);
+  document.getElementById('miniMap').textContent = "" + miniMapString();
+  document.getElementById('miniMap2').textContent = "" + miniMap2String();
 
   if((document.activeElement).getAttribute("type") != "text") {
     if(key != "null") {
