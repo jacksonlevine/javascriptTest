@@ -270,9 +270,9 @@ player = {
   foottimer: 0.0,
   isWalking: false,
   leftfoot: false,
-  id: 1,
-  width:7,
-  height:7
+  id: 0,
+  width:3,
+  height:5
 }
 mobiles.push(player)
 
@@ -284,9 +284,9 @@ player2 = {
   foottimer: 0.0,
   isWalking: false,
   leftfoot: false,
-  id: 0,
-  width:3,
-  height:5
+  id: 1,
+  width:7,
+  height:7
 }
 mobiles.push(player2)
 
@@ -298,9 +298,9 @@ player3 = {
   foottimer: 0.0,
   isWalking: false,
   leftfoot: false,
-  id: 0,
-  width:3,
-  height:5
+  id: 1,
+  width:6,
+  height:7
 }
 mobiles.push(player3)
 
