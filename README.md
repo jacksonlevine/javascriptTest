@@ -10,6 +10,7 @@ By Jackson Levine
 * CSS styling
 
 # Installation/Setup:
+
 ## Desktop/Stand-alone Setup:
 1. Clone this repository
 2. Navigate to the top folder
