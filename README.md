@@ -1,7 +1,7 @@
 # Javascript Test
 By Jackson Levine
 
-### An infinite 2d ASCII world with static objects and mobile objects
+### An infinite 2D ASCII world with static objects and mobile objects
 
 ## Technologies Used:
 
@@ -9,18 +9,22 @@ By Jackson Levine
 * Html
 * CSS styling
 
-## Installation/Setup
+# Installation/Setup:
+## Desktop/Stand-alone Setup:
+1. Clone this repository
+2. Navigate to the top folder
+3. Launch index.html in any browser.
 
-1. Visit jacksonlevine.github.io/javascriptTest/
-2. Use W, A, S, D, or the arrow keys to navigate.
-3. Press space, or any other key to stop.
+## Online or Mobile Setup:
+1. Visit https://jacksonlevine.github.io/javascriptTest/
 
-## KNOWN BUGS:
-"HUD elements" position is all out of whack.
+## Known Bugs:
+* Visual tearing of mobiles around Y:-30 (Mystery!)
+* "HUD elements" positions are all out of whack.
 
 # Credits:
 
-Vincent Bruijn @y-a-v-a - for porting Ken Perlin's smooth noise algorithm to JavaScript.
+Thank you to Vincent Bruijn @y-a-v-a - for porting Ken Perlin's smooth noise algorithm to JavaScript.
 
 _Please_ report any bugs to jack@netbug.us!
 
