@@ -870,9 +870,9 @@ function makeTree() {
       nextSpots = [...nextSpotsClone]
     }
     for(let i of leafspots) {
-      intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 2;
-      intString[(parseInt(i.y+1)*width)+parseInt(i.x-1)] = 2;
-      intString[(parseInt(i.y+1)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 3;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x-1)] = 3;
+      intString[(parseInt(i.y+1)*width)+parseInt(i.x+1)] = 3;
       intString[(parseInt(i.y)*width)+parseInt(i.x-1)] = 2;
       intString[(parseInt(i.y)*width)+parseInt(i.x+1)] = 2;
       intString[(parseInt(i.y)*width)+parseInt(i.x-2)] = 2;
@@ -889,6 +889,9 @@ function makeTree() {
         }
         if(intString[(j*width)+i] === 2) {
           string += "t";
+        }
+        if(intString[(j*width)+i] === 3) {
+          string += "j";
         }
       }
     }
@@ -971,21 +974,24 @@ function makeBigTree() {
     }
     for(let i of leafspots) {
       intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x)] = 2;
       intString[(parseInt(i.y+1)*width)+parseInt(i.x-1)] = 2;
       intString[(parseInt(i.y+1)*width)+parseInt(i.x+1)] = 2;
-      intString[(parseInt(i.y)*width)+parseInt(i.x-1)] = 2;
-      intString[(parseInt(i.y)*width)+parseInt(i.x+1)] = 2;
-      intString[(parseInt(i.y)*width)+parseInt(i.x-2)] = 2;
-      intString[(parseInt(i.y)*width)+parseInt(i.x+2)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x-1)] = 2;
+      intString[(parseInt(i.y+2)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y)*width)+parseInt(i.x-1)] = 3;
+      intString[(parseInt(i.y)*width)+parseInt(i.x+1)] = 3;
+      intString[(parseInt(i.y)*width)+parseInt(i.x-2)] = 3;
+      intString[(parseInt(i.y)*width)+parseInt(i.x+2)] = 3;
       intString[(parseInt(i.y+1)*width)+parseInt(i.x)] = 2;
-      intString[(parseInt(i.y+1)*width)+parseInt(i.x-2)] = 2;
-      intString[(parseInt(i.y+1)*width)+parseInt(i.x+2)] = 2;
       intString[(parseInt(i.y+2)*width)+parseInt(i.x-2)] = 2;
       intString[(parseInt(i.y+2)*width)+parseInt(i.x+2)] = 2;
       intString[(parseInt(i.y+2)*width)+parseInt(i.x-2)] = 2;
       intString[(parseInt(i.y+2)*width)+parseInt(i.x+2)] = 2;
-      intString[(parseInt(i.y-2)*width)+parseInt(i.x-1)] = 2;
-      intString[(parseInt(i.y-2)*width)+parseInt(i.x+1)] = 2;
+      intString[(parseInt(i.y-1)*width)+parseInt(i.x-1)] = 3;
+      intString[(parseInt(i.y-1)*width)+parseInt(i.x)] = 3;
+      intString[(parseInt(i.y-1)*width)+parseInt(i.x+1)] = 3;
     }
     let string = ""
     for(let j = 0; j < height; j++) {
@@ -997,7 +1003,10 @@ function makeBigTree() {
           string += "a";
         }
         if(intString[(j*width)+i] === 2) {
-          string += "t";
+          string += "n";
+        }
+        if(intString[(j*width)+i] === 3) {
+          string += "j";
         }
       }
     }
