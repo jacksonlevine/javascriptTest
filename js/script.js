@@ -1,4 +1,5 @@
 //  JAVSCRIPT IMPLEMENTATION OF IMPROVED NOISE   -   COPYRIGHT 2002 KEN PERLIN.
+
 const p = new Array(512);
 const permutation = [
   151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140,
@@ -76,8 +77,10 @@ class ImprovedNoise {
   }
 }
 
+// END OF IMPROVED NOISE
+
 onload = function() {
-var levels = new Array(
+let levels = new Array(
   "gg",
   "gg",
   "gg",
@@ -91,13 +94,13 @@ var levels = new Array(
   "oo",
   "qq",
 );
-var currentTime = new Date()
+let currentTime = new Date()
 
 let deltaTime = 0;
 
 
-var playx = 0.0;
-var playy = 0.0;
+let playx = 0.0;
+let playy = 0.0;
 
 let mobSkins = [];
 
@@ -126,7 +129,7 @@ const defaultSkin = [
   "yyyyyy"+
   "ooggoo"
 ]
-const ginkSkin = //w, a, s, d 
+const ginkSkin = 
 [
     "pppppppppppppp" +
     "ppppqqqqqqpppp" +
@@ -166,31 +169,6 @@ mobSkins.push(ginkSkin)
 
 var mobiles = [];
 var statics = new Map();
-
-function Mob(xa, ya) {
-
-  var mob = {
-    x: xa,
-    y: ya,
-    myIndex: mobiles.length
-  };
-
-  //mob.skin = skin;
-  
-  mobiles.unshift(mob);
-}
-
-Mob.prototype.setPosition = function(xa, ya) {
-  //mobiles[this.myIndex].x = xa;
-  //mobiles[this.myIndex].y = ya;
-}
-
-function Player(xa, ya) {
-  //Inherits from Mob
-  Mob.call(xa, ya);
-}
-
-Player.prototype = Object.create(Mob.prototype);
 
 for(let i = 0; i < 1300; i++) {
   let x = (Math.random()*2000)-1000
@@ -272,7 +250,8 @@ player = {
   leftfoot: false,
   id: 0,
   width:3,
-  height:5
+  height:5,
+  elevation:0
 }
 mobiles.push(player)
 
@@ -286,7 +265,8 @@ player2 = {
   leftfoot: false,
   id: 1,
   width:7,
-  height:7
+  height:7,
+  elevation:0
 }
 mobiles.push(player2)
 
@@ -299,15 +279,15 @@ player3 = {
   isWalking: false,
   leftfoot: false,
   id: 1,
-  width:6,
-  height:7
+  width:7,
+  height:7,
+  elevation:0
 }
 mobiles.push(player3)
 
 playheight = window.innerHeight/24;
 playwidth = window.innerWidth/18;
 let statOverscan = 20;
-let timerr = 0;
 
 function noiseValueFromCoord(i, j, scale, offset) {
   let heel2 = ImprovedNoise.noise(parseFloat((i)/5.1), parseFloat(j)/5.1, 7.2)*2;
@@ -369,9 +349,8 @@ function stringBuild(time) {
 }
 
 let miniMapX = 3;
-let miniMapY = 30;
-let miniMapWidth = 13;
-
+let miniMapWidth = 11;
+let miniMapY = miniMapWidth + 2;
 function oneCharStringBuild(i, j) {
   waterInterval = 0
   var theString = "";
@@ -382,14 +361,13 @@ function oneCharStringBuild(i, j) {
       let isStat = false;
       let coordChar = parseInt(iterationX)+","+parseInt(iterationY)
 
-      if(parseInt(i) === 3 && parseInt(j) === 20) {
+      if(parseInt(i) === miniMapX && parseInt(j) === miniMapY) {
         for(let m = miniMapWidth; m > 0; m--) {
           for(let n = 0; n < miniMapWidth; n++)  {
             let mmSpot = parseInt(iterationX+n)+","+parseInt(iterationY-m)
-            let localX = parseFloat(mobiles[player.myIndex].x+(n*25)-(miniMapWidth*12));
-            let localY = parseFloat(mobiles[player.myIndex].y-(m*25)+(miniMapWidth*12));
+
             let overPix;
-            if(Math.abs(localX-mobiles[player.myIndex].x) <= 10 && Math.abs(localY-mobiles[player.myIndex].y) <= 10) {
+            if(m === miniMapWidth || m === 1) {
               overPix = {
                 brick: "yy"
               }
@@ -397,17 +375,10 @@ function oneCharStringBuild(i, j) {
                 overSpots.set(mmSpot, overPix)
               }
             } else {
-              if(parseInt(noiseValueFromCoord(localX/2, localY/2)) > 0) {
               overPix = {
                 brick: "gg"
                 
               }
-            } else {
-              overPix = {
-                brick: "gg"
-                
-              }
-            }
               if(!overSpots.has(mmSpot)) {
                 overSpots.set(mmSpot, overPix)
               }
@@ -443,7 +414,7 @@ function oneCharStringBuild(i, j) {
         }
       }
       for(let a = 0; a < mobiles.length; a++) {
-        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, .5, 0))) + mobiles[a].height;
+        let mobY = ((isWater(mobiles[a].x, mobiles[a].y)) ? Math.min(Math.floor(mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, 1, 0)), mobiles[a].y) : (mobiles[a].y+noiseValueFromCoord(mobiles[a].x, mobiles[a].y, .5, 0))) + mobiles[a].height + mobiles[a].elevation;
         let mobX = mobiles[a].x-Math.floor(mobiles[a].width/2)
         if(parseInt(mobX) === parseInt(iterationX) && parseInt(mobY) === parseInt(iterationY)) {
           let mobID = mobiles[a].id;
@@ -579,6 +550,8 @@ function miniMap2String() {
 
 let water2 = false;
 let waterTimer = 0;
+let jump = false;
+let jumpTimer = 0;
 
 function updateTime(){
 
@@ -607,6 +580,36 @@ function updateTime(){
     levels[0] = "gx"
   } else {
     levels[0] = "xg"
+  }
+
+  if(jump) {
+    jumpTimer += deltaTime;
+    mobiles[player.myIndex].elevation += Math.round((50-jumpTimer)/25)
+    if(jumpTimer > 1 && mobiles[player.myIndex].elevation <= 0) {
+      jump = false;
+      jumpTimer = 0;
+      mobiles[player.myIndex].elevation = 0;
+      if(mobiles[player.myIndex].isWalking) {
+        switch(mobiles[player.myIndex].direction) {
+          case 0: 
+            key = "w";
+            break;
+          case 1:
+            key = "a";
+            break;
+          case 2:
+            key = "s";
+            break;
+          case 3:
+            key = "d";
+            break;
+          default:
+            break;
+        }
+      } else {
+        key = "";
+      }
+    }
   }
   
   if(isMyTouchDown) {
@@ -663,6 +666,27 @@ function updateTime(){
           playx += 1;
           mobiles[player.myIndex].direction = 3;
           mobiles[player.myIndex].isWalking = true;
+          break;
+        case "Space": case " ":
+          jump = true;
+          if(mobiles[player.myIndex].isWalking) {
+            switch(mobiles[player.myIndex].direction) {
+              case 0: 
+                playy+= 1;
+                break;
+              case 1:
+                playx-=1;
+                break;
+              case 2:
+                playy-=1;
+                break;
+              case 3:
+                playx+=1;
+                break;
+              default:
+                break;
+            }
+          }
           break;
         default:
           mobiles[player.myIndex].isWalking = false;

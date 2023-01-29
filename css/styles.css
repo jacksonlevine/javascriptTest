@@ -18,7 +18,7 @@ html {
   overscroll-behavior-y: contain;
   white-space: pre;
   font-size:90%;
-  line-height:10.68px;
+  line-height:10px;
   transform: scaleY(2) translateY(20%);
   z-index:-1;
   
@@ -71,6 +71,27 @@ html {
   justify-content: flex-start;
   align-items: flex-start;
   line-height: 19px;
+}
+
+#screenAndOverlay {
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#overlay {
+  font-family:monospace;
+  transform:scaleY(.5) translateX(45px) translateY(-210%);
+  font-size:140%;
+  font-weight:bold;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+#overlay p {
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
 .terminal p {
