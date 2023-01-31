@@ -1,3 +1,10 @@
+# This repo has moved to [this location.](https://github.com/jacksonlevine/js-game)
+## This repository will no longer be updated! See js-game for continued development.
+
+
+
+
+
 # Javascript Test
 By Jackson Levine
 
